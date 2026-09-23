@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Al-Amin</title>
+<style>
+:root {
+  --br:    #2c1f14;
+  --br2:   #1a1208;
+  --gold:  #b89a5e;
+  --gold2: #d4b87a;
+  --cream: #f5f0e8;
+  --cream2:#ede5d4;
+  --muted: #7a6a55;
+  --wh:    #ffffff;
+  --border:#ddd4c0;
+  --nav-h: 60px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+  background: var(--cream); 
+  color: var(--br); 
+  min-height: 100vh; 
+  max-width: 600px; 
+  margin: 0 auto; 
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  height: var(--nav-h);
+  background: var(--br2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(184,154,94,.2);
+}
+.nav-brand {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wh);
+  letter-spacing: .04em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-brand em { color: var(--gold); font-style: normal; }
+
+.nav-hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 6px;
+  z-index: 300;
+}
+.nav-hamburger span {
+  width: 22px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px;
+  display: block;
+  transition: all .3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--br2);
+  z-index: 199;
+  padding: 16px 20px 24px;
+  border-bottom: 1px solid rgba(184,154,94,.2);
+  flex-direction: column;
+  gap: 0;
+  max-height: calc(100vh - var(--nav-h));
+  overflow-y: auto;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav .mob-section-label {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 12px 0 4px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.mobile-nav a {
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(255,255,255,.7);
+  text-decoration: none;
+  padding: 10px 0 10px 8px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  letter-spacing: .04em;
+}
+.mobile-nav a:last-child { border-bottom: none; }
+.mobile-nav a:hover { color: var(--gold); }
+.mobile-nav a.nav-cta-mob {
+  margin-top: 14px;
+  background: var(--gold);
+  color: var(--br2);
+  text-align: center;
+  padding: 12px;
+  border-radius: 5px;
+  border: none;
+  font-weight: 600;
+}
+
+.page-hero {
+  background: var(--br);
+  padding: 36px 16px 30px;
+  text-align: center;
+}
+.page-hero .eyebrow {
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.page-hero h1 {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--wh);
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.page-hero h1 em { color: var(--gold); font-style: normal; }
+.page-hero p {
+  font-size: 13px;
+  color: rgba(255,255,255,.6);
+  line-height: 1.6;
+}
+
+.section-header {
+  padding: 28px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sh-eyebrow { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.sh-title { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--br); }
+
+.product-grid { 
+  padding: 0 16px 28px; 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr) !important; 
+  gap: 10px; 
+}
+
+.curtain-card {
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #000;
+  position: relative;
+  touch-action: pan-y;
+}
+.curtain-card img { 
+  width: 100%; 
+  height: 180px; 
+  object-fit: cover; 
+  object-position: center top; 
+  display: block; 
+  transition: transform 0.3s ease;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.curtain-card:hover img { transform: scale(1.03); }
+
+.section-divider { height: 1px; background: var(--border); margin: 0 16px; }
+
+.cta-bar { background: var(--gold); padding: 20px 16px; text-align: center; }
+.cta-bar h3 { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: var(--br2); margin-bottom: 2px; }
+.cta-bar p { font-size: 11px; color: rgba(44,31,20,.7); margin-bottom: 14px; }
+.cta-buttons { display: flex; gap: 8px; justify-content: center; }
+.btn-wa, .btn-call {
+  padding: 10px 16px; border-radius: 5px;
+  font-size: 12px; font-weight: 600;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-wa { background: #25d366; color: #fff; }
+.btn-call { background: var(--br2); color: var(--gold); }
+
+.footer-main {
+  background: #1a1208;
+  padding: 32px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-top: 1px solid rgba(184,154,94,.15);
+}
+.f-logo { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: var(--gold); display: block; }
+.f-logo-sub { font-size: 9px; color: rgba(184,154,94,.5); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; }
+.f-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.6; }
+.f-col h4 { font-family: Georgia, serif; font-size: 15px; color: #fff; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(184,154,94,.15); }
+.f-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.f-col ul li a { font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; }
+.f-contact-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; }
+.f-contact-icon { color: var(--gold); }
+.footer-bottom { background: #0e0906; padding: 14px 16px; text-align: center; border-top: 1px solid rgba(184,154,94,.08); }
+.footer-bottom p { font-size: 10px; color: rgba(255,255,255,.3); }
+
+.lightbox {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,.92); align-items: center; justify-content: center; padding: 16px;
+}
+.lightbox.open { display: flex; }
+.lb-inner { 
+  position: relative; 
+  width: 100%; 
+  max-width: 500px; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center; 
+}
+.lb-inner img {
+  max-height: 80vh;
+  max-width: 100%;
+  border-radius: 6px;
+  object-fit: contain;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Ali Parda <em>House</em></a>
+  <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+
+
+
+
+  
+
+
+<!-- ══ MOBILE NAV ══ -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" class="mob-link">Home</a>
+
+  <span class="mob-section-label">Curtains & Designs</span>
+  <a href="CNC.html" class="mob-link">CNC</a>
+  <a href="Fancy_Designs.html" class="mob-link">Fancy Designs</a>
+  <a href="Jali_Designs.html" class="mob-link">Jali Designs</a>
+  <a href="Jhahlar_Designs.html" class="mob-link">Jhahlar Designs</a>
+  <a href="SOFA.html" class="mob-link">SOFA</a>
+  <a href="Wooden_Box.html" class="mob-link">Wooden Box</a>
+
+  <span class="mob-section-label">Fabrics & Collections</span>
+  <a href="Al-Amin.html" class="mob-link">Al-Amin</a>
+  <a href="Al-Gafoor.html" class="mob-link">Al-Gafoor</a>
+  <a href="Barfi.html" class="mob-link">Barfi</a>
+  <a href="Faisalabad-Texture.html" class="mob-link">Faisalabad Texture</a>
+  <a href="Majlis.html" class="mob-link">Majlis</a>
+  <a href="Pathan-Texture.html" class="mob-link">Pathan Texture</a>
+  <a href="Plain_Curtains.html" class="mob-link">Plain Curtains</a>
+  <a href="Plain-Malai.html" class="mob-link">Plain Malai</a>
+  <a href="Texture_Curtains.html" class="mob-link">Texture Curtains</a>
+
+  <span class="mob-section-label">Blinds</span>
+  <a href="BLINDS.html" class="mob-link">All Blinds</a>
+  <a href="Roller Blinds.html" class="mob-link">Roller Blinds</a>
+  <a href="Vertical Blinds.html" class="mob-link">Vertical Blinds</a>
+  <a href="Wooden Blinds.html" class="mob-link">Wooden Blinds</a>
+  <a href="Zebra Blinds.html" class="mob-link">Zebra Blinds</a>
+
+  <span class="mob-section-label">Accessories</span>
+  <a href="Pipes.html" class="mob-link">Pipes</a>
+  <a href="Brackets.html" class="mob-link">Brackets</a>
+  <a href="Curtain Rings.html" class="mob-link">Curtain Rings</a>
+  <a href="double ring.html" class="mob-link">Double Ring</a>
+  <a href="Stopers.html" class="mob-link">Stopers</a>
+  <a href="TIE HUKS.html" class="mob-link">Tie Hooks</a>
+
+  <span class="mob-section-label">Manage & System</span>
+  <a href="completed_work.html" class="mob-link">Completed Work</a>
+  <a href="drive.html" class="mob-link">📁 Drive</a>
+  <a href="PERSONAL DATA.html" class="mob-link">Personal Data</a>
+  <a href="prompts.html" class="mob-link">Prompts</a>
+
+  <a href="tel:03458584520" class="nav-cta-mob">📞 Get a Quote</a>
+</div>
+
+
+<section class="page-hero" id="top">
+  <p class="eyebrow">Timeless Simplicity</p>
+  <h1>Sofa</h1>
+  <p>Explore our full showcase of elegant, versatile Sofa crafted to bring subtle warmth and sophistication to any room.</p>
+</section>
+<div class="category-block" data-category="sofa" id="section-sofa">
+  <div class="section-header">
+    <p class="sh-eyebrow">Smooth Movement</p>
+    <h2 class="sh-title">SOFA</h2>
+  </div>
+  <div class="product-grid">
+        <div class="curtain-card"><img src="images/s1.jpg" alt="Sofa 1" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s2.jpg" alt="Sofa 2" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s3.jpg" alt="Sofa 3" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s4.jpg" alt="Sofa 4" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s5.jpg" alt="Sofa 5" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s6.jpg" alt="Sofa 6" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s7.jpg" alt="Sofa 7" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s8.jpg" alt="Sofa 8" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s9.jpg" alt="Sofa 9" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s10.jpg" alt="Sofa 10" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s11.jpg" alt="Sofa 11" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s12.jpg" alt="Sofa 12" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s13.jpg" alt="Sofa 13" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s14.jpg" alt="Sofa 14" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s15.jpg" alt="Sofa 15" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s16.jpg" alt="Sofa 16" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s17.jpg" alt="Sofa 17" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s18.jpg" alt="Sofa 18" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s19.jpg" alt="Sofa 19" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s20.jpg" alt="Sofa 20" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s21.jpg" alt="Sofa 21" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s22.jpg" alt="Sofa 22" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s23.jpg" alt="Sofa 23" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s24.jpg" alt="Sofa 24" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s25.jpg" alt="Sofa 25" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s26.jpg" alt="Sofa 26" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s27.jpg" alt="Sofa 27" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s28.jpg" alt="Sofa 28" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s29.jpg" alt="Sofa 29" data-target="accessories.html"></div>
+    <div class="curtain-card"><img src="images/s30.jpg" alt="Sofa 30" data-target="accessories.html"></div>
+
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<div class="cta-bar">
+  <h3>Interested in Plain Curtains?</h3>
+  <p>Free measurement · Custom sizing</p>
+  <div class="cta-buttons">
+    <a class="btn-wa" href="https://wa.me/923458584520?text=Hello%20Ali%20Parda%20House%21%20I%20am%20interested%20in%20your%20Plain%20Curtains%20Collection." target="_blank" rel="noopener">WhatsApp Us</a>
+    <a class="btn-call" href="tel:03458584520">Call Now</a>
+  </div>
+</div>
+
+<div class="footer-main">
+  <div>
+    <span class="f-logo">Ali Parda House</span>
+    <span class="f-logo-sub">Premium Window Solutions</span>
+    <p class="f-desc">Your trusted source for premium quality blinds, curtains and accessories in Pakistan.</p>
+  </div>
+
+  <div class="f-col">
+    <h4>Quick Links</h4>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#section-blinds">Blinds</a></li>
+      <li><a href="index.html#section-pipes">Accessories</a></li>
+    </ul>
+  </div>
+
+  <div class="f-col">
+    <h4>Curtains</h4>
+    <ul>
+      <li><a href="plain curtains.html">Simple Plain Curtains</a></li>
+      <li><a href="index.html#section-woodenbox">Wooden Box Curtains</a></li>
+      <li><a href="index.html#section-cnc">CNC Box Curtains</a></li>
+      <li><a href="index.html#section-jali">Jali Designs</a></li>
+    </ul>
+  </div>
+
+  <div class="f-col">
+    <h4>Contact Us</h4>
+    <div class="f-contact-row">
+      <span class="f-contact-icon">📍</span>
+      <span>Ali Parda House Bhimber, near purana hathi gate</span>
+    </div>
+    <a href="tel:03458584520" class="f-contact-row">
+      <span class="f-contact-icon">📞</span>
+      <span>0345-8584520</span>
+    </a>
+  </div>
+</div>
+
+<div class="footer-bottom">
+  <p>© 2026 Ali Parda House. All rights reserved.</p>
+</div>
+
+<!-- Lightbox Modal Container -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-inner" id="lb-inner">
+    <img src="" alt="" id="lb-img">
+  </div>
+</div>
+
+<script>
+/* Navigation Hamburger Toggle */
+var hamburgerBtn = document.getElementById('hamburgerBtn');
+var mobileNav = document.getElementById('mobileNav');
+
+hamburgerBtn.addEventListener('click', function(e) {
+  e.stopPropagation();
+  mobileNav.classList.toggle('open');
+  hamburgerBtn.classList.toggle('open');
+});
+
+document.querySelectorAll('.mob-link').forEach(function(link) {
+  link.addEventListener('click', function() {
+    mobileNav.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+  });
+});
+
+document.addEventListener('click', function(e) {
+  if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+    mobileNav.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+  }
+});
+
+/* Lightbox Click Preview */
+var lightbox = document.getElementById('lightbox');
+var lbImg = document.getElementById('lb-img');
+
+document.querySelectorAll('.curtain-card img').forEach(function(img) {
+  img.addEventListener('click', function() {
+    lbImg.src = this.src;
+    lbImg.alt = this.alt;
+    lightbox.classList.add('open');
+  });
+});
+
+lightbox.addEventListener('click', function() {
+  lightbox.classList.remove('open');
+});
+</script>
+
+</body>
+</html>
