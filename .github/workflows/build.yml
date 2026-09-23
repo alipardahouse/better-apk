@@ -32,51 +32,26 @@ jobs:
       - name: Build Cordova Project
         run: |
           cordova create build_app com.alipardahouse.app "Alipardahouse"
+
           rm -rf build_app/www/*
 
-          cp -r \
-            index.html \
-            "Al-Amin.html" \
-            "Al-Gafoor.html" \
-            "Barfi.html" \
-            "BLINDS.html" \
-            "Brackets.html" \
-            "CNC.html" \
-            "completed_work.html" \
-            "Curtain Rings.html" \
-            "double ring.html" \
-            "drive.html" \
-            "Faisalabad-Texture.html" \
-            "Fancy_Designs.html" \
-            "Jali_Designs.html" \
-            "Jahlar_Designs.html" \
-            "Majlis.html" \
-            "Pathan-Texture.html" \
-            "PERSONAL DATA.html" \
-            "Pipes.html" \
-            "Plain Curtains.html" \
-            "Plain-Malai.html" \
-            "prompts.html" \
-            "Roller Blinds.html" \
-            "SOFA.html" \
-            "Stopers.html" \
-            "Texture Curtains.html" \
-            "TIE HUKS.html" \
-            "Vertical Blinds.html" \
-            "Wooden Blinds.html" \
-            "Wooden_Box.html" \
-            "Zebra Blinds.html" \
-            build_app/www/
+          # Copy ALL HTML files automatically
+          cp -r *.html build_app/www/
 
+          # Copy config file
           cp config.xml build_app/
 
+          # Create images folder
           mkdir -p build_app/images
 
+          # Copy app icons
           cp images/icon.png build_app/images/
           cp images/splash.png build_app/images/
 
           cd build_app
+
           cordova platform add android
+
           cordova build android --debug
 
       - name: Upload APK Artifact
