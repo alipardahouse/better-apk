@@ -38,10 +38,13 @@ jobs:
           # Copy ALL HTML files automatically
           cp -r *.html build_app/www/
 
+          # Copy ALL images into APK
+          cp -r images build_app/www/
+
           # Copy config file
           cp config.xml build_app/
 
-          # Create images folder
+          # Create images folder for app icons
           mkdir -p build_app/images
 
           # Copy app icons
