@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts — Ali Parda House</title>
+<style>
+:root {
+  --br:#2c1f14; --br2:#1a1208; --gold:#b89a5e; --gold2:#d4b87a;
+  --cream:#f5f0e8; --cream2:#ede5d4; --muted:#7a6a55;
+  --wh:#fff; --border:#ddd4c0; --nav-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+background:var(--cream);color:var(--br);min-height:100vh;max-width:600px;margin:0 auto;
+box-shadow:0 0 20px rgba(0,0,0,.15)}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;height:var(--nav-h);background:var(--br2);
+display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+border-bottom:1px solid rgba(184,154,94,.2)}
+.nav-brand{font-family:Georgia,serif;font-size:18px;font-weight:700;color:var(--wh);
+letter-spacing:.04em;text-decoration:none;white-space:nowrap}
+.nav-brand em{color:var(--gold);font-style:normal}
+.nav-hamburger{display:flex;flex-direction:column;gap:5px;cursor:pointer;background:none;
+border:0;padding:6px;z-index:300}
+.nav-hamburger span{width:22px;height:2px;background:var(--gold);border-radius:2px;display:block;
+transition:all .3s}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* Mobile Navigation Styles */
+.mobile-nav{display:none;position:fixed;top:var(--nav-h);left:0;right:0;max-width:600px;
+margin:0 auto;background:var(--br2);z-index:199;padding:16px 20px 24px;flex-direction:column;
+gap:0;max-height:calc(100vh - var(--nav-h));overflow-y:auto;border-bottom:1px solid rgba(184,154,94,.2)}
+.mobile-nav.open{display:flex}
+.mobile-nav a{font-size:14px;font-weight:300;color:rgba(255,255,255,.7);text-decoration:none;
+padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);letter-spacing:.04em}
+.mobile-nav a:hover{color:var(--gold)}
+.mob-section-label {
+  display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--gold); margin-top: 16px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid rgba(184,154,94,.3);
+}
+.nav-cta-mob {
+  display: inline-block; margin-top: 16px; padding: 10px 16px; background: var(--gold); color: var(--br2) !important;
+  font-weight: 600; text-align: center; border-radius: 6px; border-bottom: none !important;
+}
+
+.page-hero{background:var(--br);padding:36px 16px 30px;text-align:center}
+.eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+h1{font-family:Georgia,serif;font-size:28px;color:var(--wh);line-height:1.2;margin-bottom:10px}
+h1 em{color:var(--gold);font-style:normal}
+.page-hero p:last-child{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+.content{padding:24px 16px 32px}
+.prompt-card{background:var(--wh);border:1px solid var(--border);border-radius:10px;
+margin-bottom:18px;overflow:hidden;box-shadow:0 4px 12px rgba(44,31,20,.06)}
+.prompt-head{background:var(--br2);color:var(--gold);padding:13px 14px;display:flex;
+align-items:center;justify-content:space-between;gap:8px}
+.prompt-head h2{font-family:Georgia,serif;font-size:17px;color:var(--wh)}
+.copy-btn{background:var(--gold);color:var(--br2);border:0;border-radius:5px;padding:8px 11px;
+font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.copy-btn:active{transform:scale(.97)}
+.prompt-body{padding:14px}
+.prompt-text{white-space:pre-wrap;font-size:12px;line-height:1.65;color:var(--br);
+max-height:420px;overflow-y:auto}
+.empty-prompt{min-height:150px;border:2px dashed var(--gold);border-radius:6px;
+display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);
+font-size:13px;padding:20px;background:rgba(184,154,94,.05)}
+.footer-bottom{background:#0e0906;padding:14px 16px;text-align:center;border-top:1px solid rgba(184,154,94,.08)}
+.footer-bottom p{font-size:10px;color:rgba(255,255,255,.3)}
+</style>
+</head>
+<body>
+
+<nav>
+<a href="index.html" class="nav-brand">Ali Parda <em>House</em></a>
+<button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
+</nav>
+
+<!-- ══ MOBILE NAV ══ -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html" class="mob-link">Home</a>
+
+  <span class="mob-section-label">Curtains & Designs</span>
+  <a href="CNC.html" class="mob-link">CNC</a>
+  <a href="Fancy_Designs.html" class="mob-link">Fancy Designs</a>
+  <a href="Jali_Designs.html" class="mob-link">Jali Designs</a>
+  <a href="Jhahlar_Designs.html" class="mob-link">Jhahlar Designs</a>
+  <a href="SOFA.html" class="mob-link">SOFA</a>
+  <a href="Wooden_Box.html" class="mob-link">Wooden Box</a>
+
+  <span class="mob-section-label">Fabrics & Collections</span>
+  <a href="Al-Amin.html" class="mob-link">Al-Amin</a>
+  <a href="Al-Gafoor.html" class="mob-link">Al-Gafoor</a>
+  <a href="Barfi.html" class="mob-link">Barfi</a>
+  <a href="Faisalabad-Texture.html" class="mob-link">Faisalabad Texture</a>
+  <a href="Majlis.html" class="mob-link">Majlis</a>
+  <a href="Pathan-Texture.html" class="mob-link">Pathan Texture</a>
+  <a href="Plain_Curtains.html" class="mob-link">Plain Curtains</a>
+  <a href="Plain-Malai.html" class="mob-link">Plain Malai</a>
+  <a href="Texture_Curtains.html" class="mob-link">Texture Curtains</a>
+
+  <span class="mob-section-label">Blinds</span>
+  <a href="BLINDS.html" class="mob-link">All Blinds</a>
+  <a href="Roller Blinds.html" class="mob-link">Roller Blinds</a>
+  <a href="Vertical Blinds.html" class="mob-link">Vertical Blinds</a>
+  <a href="Wooden Blinds.html" class="mob-link">Wooden Blinds</a>
+  <a href="Zebra Blinds.html" class="mob-link">Zebra Blinds</a>
+
+  <span class="mob-section-label">Accessories</span>
+  <a href="Pipes.html" class="mob-link">Pipes</a>
+  <a href="Brackets.html" class="mob-link">Brackets</a>
+  <a href="Curtain Rings.html" class="mob-link">Curtain Rings</a>
+  <a href="double ring.html" class="mob-link">Double Ring</a>
+  <a href="Stopers.html" class="mob-link">Stopers</a>
+  <a href="TIE HUKS.html" class="mob-link">Tie Hooks</a>
+
+  <span class="mob-section-label">Manage & System</span>
+  <a href="completed_work.html" class="mob-link">Completed Work</a>
+  <a href="drive.html" class="mob-link">📁 Drive</a>
+  <a href="PERSONAL DATA.html" class="mob-link">Personal Data</a>
+  <a href="prompts.html" class="mob-link">Prompts</a>
+
+  <a href="tel:03458584520" class="nav-cta-mob">📞 Get a Quote</a>
+</div>
+
+<section class="page-hero">
+<p class="eyebrow">AI Tools & Resources</p>
+<h1>Important <em>Prompts</em></h1>
+<p>Save your most useful prompts and copy them instantly whenever you need them.</p>
+</section>
+
+<main class="content">
+<div class="prompt-card">
+<div class="prompt-head"><h2>Prompt 1</h2><button class="copy-btn" onclick="copyPrompt('prompt1',this)">📋 Copy Prompt</button></div>
+<div class="prompt-body"><div class="prompt-text" id="prompt1">TASK: REALISTIC CURTAIN REPLACEMENT / VIRTUAL INSTALLATION
+
+Use the provided WINDOW PHOTO as the exact base scene and the provided CURTAIN PHOTO as the exact curtain reference.
+
+IMPORTANT:
+The final image must look like a real photograph of the SAME window with the SAME curtain professionally installed on it.
+
+1. PRESERVE THE ORIGINAL WINDOW PHOTO
+- Keep the original window, wall, room, architecture, camera position, perspective, framing, colors and environment unchanged.
+- Do NOT redesign, renovate, beautify, enlarge, shrink or replace the window.
+- Do NOT change the wall, floor, ceiling, furniture or any surrounding objects.
+- Maintain the exact original camera angle and viewing perspective.
+- Preserve the original image composition as much as possible.
+
+2. PRESERVE THE CURTAIN EXACTLY
+- Use the curtain from the reference image as the exact visual product.
+- Do NOT redesign the curtain.
+- Do NOT change its fabric type, color, shade, pattern, embroidery, texture, stitching, pleats, borders, folds or decorative details.
+- Do NOT invent additional patterns or decorations.
+- The curtain must remain visually identical to the reference product.
+- Preserve the exact color and material appearance.
+- Preserve the same styling and overall design language.
+
+3. FIT THE CURTAIN TO THE WINDOW
+- Professionally install the exact curtain onto the target window.
+- Adjust ONLY the curtain's dimensions, width, height and positioning so that it naturally fits the target window.
+- The curtain should follow the actual proportions and dimensions of the target window.
+- Maintain realistic curtain fullness and natural pleating.
+- The curtain should hang naturally from the appropriate top position and reach the appropriate bottom position according to the window.
+- Do not stretch the curtain unnaturally.
+- Do not distort the curtain pattern or fabric texture.
+- If the curtain is wider than the window, create realistic gathered/pleated fullness rather than simply stretching or squashing it.
+- If necessary, crop or extend the curtain vertically/horizontally ONLY in a physically realistic way while keeping its original design consistent.
+
+4. LIGHTING MATCH
+- Keep the EXACT lighting environment of the original window photograph.
+- Match the curtain's brightness, shadows, highlights and reflections to the existing scene.
+- The curtain must look as if it was physically present when the original photograph was taken.
+- Match the direction, softness, intensity and color temperature of the existing light.
+- Add realistic shadows behind and around the curtain where physically appropriate.
+- Do not introduce a new lighting setup.
+- Do not make the curtain unnaturally brighter, darker, warmer or cooler than the scene.
+
+5. MATERIAL REALISM
+- Preserve the real fabric texture from the reference image.
+- Create realistic fabric folds, weight, thickness and draping.
+- The curtain should behave like real fabric affected by gravity.
+- Avoid plastic, CGI, painted, artificial or overly smooth appearance.
+- Keep realistic micro-texture and natural wrinkles.
+- Maintain accurate opacity/translucency according to the original curtain material.
+
+6. PERSPECTIVE & GEOMETRY
+- The curtain must follow the exact perspective of the target window.
+- Vertical curtain edges must align naturally with the architecture.
+- Curtain folds must follow the perspective and hanging direction.
+- Correctly account for the camera's viewpoint.
+- Avoid warped window frames or distorted room geometry.
+- The curtain rod/tracks should be positioned realistically if visible.
+
+7. CONSISTENCY
+The final image must visually communicate:
+
+"THIS IS THE EXACT SAME CURTAIN PRODUCT PHOTOGRAPHED INSIDE THIS EXACT WINDOW."
+
+Do not create a similar curtain.
+Do not generate an alternative design.
+Do not change the curtain style.
+Do not change the room.
+Do not change the window.
+
+ONLY perform a realistic virtual installation of the supplied curtain onto the supplied window.
+
+8. PHOTOREALISM
+- Extremely photorealistic commercial interior photography.
+- Natural fabric behavior.
+- Realistic shadows and contact shadows.
+- Accurate perspective.
+- Realistic material response.
+- No AI-looking artifacts.
+- No duplicated folds.
+- No strange edges.
+- No floating fabric.
+- No distorted patterns.
+- No melted or warped window frames.
+- No artificial halos around the curtain.
+
+9. CUSTOMER PRESENTATION
+The final image should be suitable for showing directly to a curtain customer as a realistic visualization of how their selected curtain would look on their window.
+
+10. RESOLUTION
+Generate at the highest possible native resolution and maximum available image quality.
+Preserve fine fabric details, stitching, texture and pattern clarity.
+Do not upscale in a way that creates artificial details.
+
+FINAL PRIORITY:
+WINDOW PHOTO = unchanged base environment.
+CURTAIN PHOTO = exact product/design reference.
+Only modify the curtain placement, dimensions, perspective, folds and installation so it realistically fits the target window.
+
+The result must look like a genuine professional photograph, NOT an AI-generated redesign.</div></div>
+</div>
+
+<div class="prompt-card">
+<div class="prompt-head"><h2>Prompt 2</h2><button class="copy-btn" onclick="copyPrompt('prompt2',this)">📋 Copy Prompt</button></div>
+<div class="prompt-body"><div class="empty-prompt" id="prompt2">Your next prompt will be added here.</div></div>
+</div><div class="prompt-card">
+<div class="prompt-head"><h2>Prompt 3</h2><button class="copy-btn" onclick="copyPrompt('prompt3',this)">📋 Copy Prompt</button></div>
+<div class="prompt-body"><div class="empty-prompt" id="prompt3">Your next prompt will be added here.</div></div>
+</div><div class="prompt-card">
+<div class="prompt-head"><h2>Prompt 4</h2><button class="copy-btn" onclick="copyPrompt('prompt4',this)">📋 Copy Prompt</button></div>
+<div class="prompt-body"><div class="empty-prompt" id="prompt4">Your next prompt will be added here.</div></div>
+</div><div class="prompt-card">
+<div class="prompt-head"><h2>Prompt 5</h2><button class="copy-btn" onclick="copyPrompt('prompt5',this)">📋 Copy Prompt</button></div>
+<div class="prompt-body"><div class="empty-prompt" id="prompt5">Your next prompt will be added here.</div></div>
+</div>
+</main>
+
+<footer class="footer-bottom"><p>© 2001–2026 Ali Parda House · Crafted with elegance</p></footer>
+
+<script>
+const hamburger=document.getElementById('hamburgerBtn');
+const mobileNav=document.getElementById('mobileNav');
+hamburger.addEventListener('click',()=>{
+hamburger.classList.toggle('open');mobileNav.classList.toggle('open');
+});
+document.querySelectorAll('.mobile-nav a').forEach(a=>a.addEventListener('click',()=>{
+hamburger.classList.remove('open');mobileNav.classList.remove('open');
+}));
+function copyPrompt(id,button){
+const el=document.getElementById(id);
+const text=el.innerText;
+if(!text || text.includes('Your next prompt will be added here.')){
+button.textContent='Empty Prompt';setTimeout(()=>button.textContent='📋 Copy Prompt',1500);return;
+}
+navigator.clipboard.writeText(text).then(()=>{
+button.textContent='✓ Copied!';
+setTimeout(()=>button.textContent='📋 Copy Prompt',1500);
+}).catch(()=>{
+const area=document.createElement('textarea');area.value=text;document.body.appendChild(area);
+area.select();document.execCommand('copy');area.remove();
+button.textContent='✓ Copied!';setTimeout(()=>button.textContent='📋 Copy Prompt',1500);
+});
+}
+</script>
+</body>
+</html>
