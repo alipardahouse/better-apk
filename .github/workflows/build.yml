@@ -35,11 +35,14 @@ jobs:
 
           rm -rf build_app/www/*
 
-          # Copy ALL HTML files automatically
+          # Copy ALL existing HTML files automatically
           cp -r *.html build_app/www/
 
-          # Copy ALL images into APK
+          # Copy ALL existing images into APK
           cp -r images build_app/www/
+
+          # Clone cuttlefish repository offline into www/cuttlefish (Added here)
+          git clone https://github.com/cottonrays/cuttlefish.git build_app/www/cuttlefish
 
           # Copy config file
           cp config.xml build_app/
