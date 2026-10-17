@@ -41,8 +41,11 @@ jobs:
           # Copy ALL existing images into APK
           cp -r images build_app/www/
 
-          # Clone cuttlefish repository offline into www/cuttlefish (Added here)
+          # Clone cuttlefish repository into www/cuttlefish
           git clone https://github.com/cottonrays/cuttlefish.git build_app/www/cuttlefish
+
+          # REMOVE the .git folder so Cordova builds without permission errors
+          rm -rf build_app/www/cuttlefish/.git
 
           # Copy config file
           cp config.xml build_app/
