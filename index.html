@@ -1792,6 +1792,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var pushed = false;
   var skipPop = 0;
   var scale = 1;
+  var panX = 0;
+  var panY = 0;
+  var panStartX = 0;
+  var panStartY = 0;
+  var isPanning = false;
+  var mouseDown = false;
+  var mouseStartX = 0;
+  var mouseStartY = 0;
+  var mousePanX = 0;
+  var mousePanY = 0;
   var startScale = 1;
   var startDistance = 0;
   var startX = 0;
@@ -1807,13 +1817,29 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   }
 
+  function clampPan() {
+    var viewportWidth = lbInner.clientWidth;
+    var viewportHeight = lbInner.clientHeight;
+    var scaledWidth = lbImg.offsetWidth * scale;
+    var scaledHeight = lbImg.offsetHeight * scale;
+    var maxX = Math.max(0, (scaledWidth - viewportWidth) / 2);
+    var maxY = Math.max(0, (scaledHeight - viewportHeight) / 2);
+    panX = Math.max(-maxX, Math.min(maxX, panX));
+    panY = Math.max(-maxY, Math.min(maxY, panY));
+  }
+
   function applyZoom(animated) {
+    clampPan();
     lbImg.style.transition = animated ? 'transform .18s ease' : 'none';
-    lbImg.style.transform = 'scale(' + scale + ')';
+    lbImg.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + scale + ')';
   }
 
   function resetZoom() {
     scale = 1;
+    panX = 0;
+    panY = 0;
+    isPanning = false;
+    mouseDown = false;
     applyZoom(true);
   }
 
@@ -1927,6 +1953,9 @@ document.addEventListener('DOMContentLoaded', function () {
       isPinching = false;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
+      panStartX = panX;
+      panStartY = panY;
+      isPanning = scale > 1;
     }
   }, { passive: true });
 
@@ -1945,6 +1974,13 @@ document.addEventListener('DOMContentLoaded', function () {
       var dx = e.touches[0].clientX - startX;
       var dy = e.touches[0].clientY - startY;
       if (Math.abs(dx) > 10 || Math.abs(dy) > 10) moved = true;
+      if (scale > 1) {
+        e.preventDefault();
+        isPanning = true;
+        panX = panStartX + dx;
+        panY = panStartY + dy;
+        applyZoom(false);
+      }
     }
   }, { passive: false });
 
@@ -1952,7 +1988,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!lightbox.classList.contains('open')) return;
     if (isPinching) {
       isPinching = false;
-      if (scale < 1.05) { scale = 1; applyZoom(true); }
+      if (scale < 1.05) { scale = 1; panX = 0; panY = 0; applyZoom(true); }
       return;
     }
 
@@ -1961,7 +1997,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var dx = touch.clientX - startX;
     var dy = touch.clientY - startY;
 
-    /* Horizontal swipe = gallery navigation. */
+    /* While zoomed, dragging only pans the current image; never switch images.
+       A double tap is still allowed to reset the zoom. */
+    if (scale > 1 && moved) {
+      isPanning = false;
+      return;
+    }
+
+    /* Horizontal swipe = gallery navigation when not zoomed. */
     if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.2) {
       if (dx < 0) nextImage();
       else previousImage();
@@ -1972,7 +2015,16 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!moved) {
       var now = Date.now();
       if (now - lastTap < 300) {
-        scale = scale > 1 ? 1 : 2;
+        if (scale > 1) {
+          scale = 1;
+          panX = 0;
+          panY = 0;
+        } else {
+          scale = 2;
+          panX = 0;
+          panY = 0;
+        }
+        lbImg.style.cursor = scale > 1 ? 'grab' : '';
         applyZoom(true);
         lastTap = 0;
       } else {
@@ -1981,11 +2033,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }, { passive: true });
 
+  /* Drag to inspect every edge of a zoomed image on desktop. */
+  lbInner.addEventListener('mousedown', function (e) {
+    if (!lightbox.classList.contains('open') || scale <= 1 || e.button !== 0) return;
+    mouseDown = true;
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    mousePanX = panX;
+    mousePanY = panY;
+    lbImg.style.cursor = 'grabbing';
+    e.preventDefault();
+  });
+
+  window.addEventListener('mousemove', function (e) {
+    if (!mouseDown) return;
+    panX = mousePanX + (e.clientX - mouseStartX);
+    panY = mousePanY + (e.clientY - mouseStartY);
+    applyZoom(false);
+  });
+
+  window.addEventListener('mouseup', function () {
+    mouseDown = false;
+    lbImg.style.cursor = scale > 1 ? 'grab' : '';
+  });
+
   /* Mouse wheel zoom on desktop. */
   lbImg.addEventListener('wheel', function (e) {
     if (!lightbox.classList.contains('open')) return;
     e.preventDefault();
     scale = Math.min(4, Math.max(1, scale + (e.deltaY < 0 ? 0.2 : -0.2)));
+    if (scale === 1) { panX = 0; panY = 0; }
+    lbImg.style.cursor = scale > 1 ? 'grab' : '';
     applyZoom(true);
   }, { passive: false });
 
