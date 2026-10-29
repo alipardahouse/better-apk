@@ -172,10 +172,11 @@ nav {
   background: #000;
   position: relative;
   touch-action: pan-y;
+  height: 180px;
 }
-.curtain-card img { 
+.curtain-card img, .curtain-card video { 
   width: 100%; 
-  height: 180px; 
+  height: 100%; 
   object-fit: cover; 
   object-position: center top; 
   display: block; 
@@ -184,7 +185,7 @@ nav {
   user-select: none;
   -webkit-touch-callout: none;
 }
-.curtain-card:hover img { transform: scale(1.03); }
+.curtain-card:hover img, .curtain-card:hover video { transform: scale(1.03); }
 
 .section-divider { height: 1px; background: var(--border); margin: 0 16px; }
 
@@ -231,7 +232,7 @@ nav {
   display: flex; align-items: center; justify-content: center;
   overflow: hidden; touch-action: none;
 }
-.lb-inner img {
+.lb-inner img, .lb-inner video {
   display: block; max-width: 100%; max-height: 100%;
   width: auto; height: auto; border-radius: 0; object-fit: contain;
   transform: translate3d(0,0,0) scale(1); transform-origin: center center;
@@ -247,13 +248,6 @@ nav {
     <span></span><span></span><span></span>
   </button>
 </nav>
-
-
-
-
-
-  
-
 
 <!-- ══ MOBILE NAV ══ -->
 <div class="mobile-nav" id="mobileNav">
@@ -304,7 +298,7 @@ nav {
 
 <section class="page-hero" id="top">
   <p class="eyebrow">Timeless Simplicity</p>
-  <h1>Al-Amin</em></h1>
+  <h1>Al-Amin</h1>
   <p>Explore our full showcase of elegant, versatile Al-Amin curtains crafted to bring subtle warmth and sophistication to any room.</p>
 </section>
 
@@ -314,7 +308,8 @@ nav {
     <h2 class="sh-title">Al-Amin</h2>
   </div>
   <div class="product-grid">
-  <div class="curtain-card"><img src="images/jalal1.jpg" alt="Jalal 1" data-target="Jalal.html"></div>
+    <!-- AAP MOVIES YA IMAGES ISI TARAH DALEIN: DATA-SRC MAIN MP4 YA JPG PATH DEDEIN -->
+    <div class="curtain-card"><img src="images/jalal1.jpg" alt="Jalal 1" data-target="Jalal.html"></div>
 <div class="curtain-card"><img src="images/jalal2.jpg" alt="Jalal 2" data-target="Jalal.html"></div>
 <div class="curtain-card"><img src="images/jalal3.jpg" alt="Jalal 3" data-target="Jalal.html"></div>
 <div class="curtain-card"><img src="images/jalal4.jpg" alt="Jalal 4" data-target="Jalal.html"></div>
@@ -523,9 +518,7 @@ nav {
 
 <!-- Lightbox Modal Container -->
 <div class="lightbox" id="lightbox">
-  <div class="lb-inner" id="lb-inner">
-    <img src="" alt="" id="lb-img">
-  </div>
+  <div class="lb-inner" id="lb-inner"></div>
 </div>
 
 <script>
@@ -553,40 +546,98 @@ document.addEventListener('click', function(e) {
   }
 });
 
-/* Full-screen gallery viewer: swipe, zoom, history-aware Back, and Cordova Back */
+/* Helper Function to Check Video Extensions */
+function isVideo(url) {
+  return /\.(mp4|webm|ogg|mov)$/i.test(url);
+}
+
+/* Render Cards dynamically with Video or Image */
+var cards = Array.prototype.slice.call(document.querySelectorAll('.curtain-card'));
+
+cards.forEach(function(card) {
+  var src = card.getAttribute('data-src');
+  var alt = card.getAttribute('data-alt') || 'Curtain';
+
+  if (!src) return;
+
+  if (isVideo(src)) {
+    var video = document.createElement('video');
+    video.src = src;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    card.appendChild(video);
+  } else {
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = alt;
+    card.appendChild(img);
+  }
+});
+
+/* Lightbox Script Supporting both Images and Videos */
 (function() {
   var lightbox = document.getElementById('lightbox');
   var lbInner = document.getElementById('lb-inner');
-  var lbImg = document.getElementById('lb-img');
-  var galleryImages = Array.prototype.slice.call(document.querySelectorAll('.curtain-card img'));
+  var activeMediaEl = null;
+  var galleryCards = cards;
   var currentIndex = -1, viewerOpen = false, historyPushed = false, skipPop = 0;
   var savedScrollY = 0, savedBodyOverflow = '', savedHtmlOverflow = '';
   var scale = 1, maxScale = 4, translateX = 0, translateY = 0;
-  var startDistance = 0, startScale = 1, startTranslateX = 0, startTranslateY = 0;
+  var startDistance = 0, startScale = 1;
   var startX = 0, startY = 0, gestureMode = '', moved = false, suppressClickUntil = 0;
 
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
   function applyTransform() {
-    lbImg.style.transform = 'translate3d(' + translateX + 'px,' + translateY + 'px,0) scale(' + scale + ')';
+    if (activeMediaEl) {
+      activeMediaEl.style.transform = 'translate3d(' + translateX + 'px,' + translateY + 'px,0) scale(' + scale + ')';
+    }
   }
   function resetZoom() {
     scale = 1; translateX = 0; translateY = 0; applyTransform();
   }
   function fitTranslation() {
-    if (scale <= 1) { translateX = 0; translateY = 0; return; }
-    var r = lbImg.getBoundingClientRect();
+    if (scale <= 1 || !activeMediaEl) { translateX = 0; translateY = 0; return; }
+    var r = activeMediaEl.getBoundingClientRect();
     var maxX = Math.max(0, (r.width * scale - lbInner.clientWidth) / 2);
     var maxY = Math.max(0, (r.height * scale - lbInner.clientHeight) / 2);
     translateX = clamp(translateX, -maxX, maxX);
     translateY = clamp(translateY, -maxY, maxY);
   }
-  function showImage(index) {
-    if (!galleryImages.length) return;
-    currentIndex = (index + galleryImages.length) % galleryImages.length;
+
+  function showMedia(index) {
+    if (!galleryCards.length) return;
+    currentIndex = (index + galleryCards.length) % galleryCards.length;
+    lbInner.innerHTML = ''; // clear previous media
+    
+    var card = galleryCards[currentIndex];
+    var src = card.getAttribute('data-src');
+
+    if (isVideo(src)) {
+      activeMediaEl = document.createElement('video');
+      activeMediaEl.src = src;
+      activeMediaEl.autoplay = true;
+      activeMediaEl.loop = true;
+      activeMediaEl.muted = true;
+      activeMediaEl.playsInline = true;
+      activeMediaEl.controls = true;
+    } else {
+      activeMediaEl = document.createElement('img');
+      activeMediaEl.src = src;
+      activeMediaEl.alt = card.getAttribute('data-alt') || '';
+    }
+
     resetZoom();
-    lbImg.src = galleryImages[currentIndex].currentSrc || galleryImages[currentIndex].src;
-    lbImg.alt = galleryImages[currentIndex].alt || '';
+    lbInner.appendChild(activeMediaEl);
+
+    // Double click to zoom
+    activeMediaEl.addEventListener('dblclick', function(e) {
+      e.preventDefault();
+      if (scale > 1) resetZoom(); else { scale = 2; applyTransform(); }
+    });
   }
+
   function lockPage() {
     savedBodyOverflow = document.body.style.overflow;
     savedHtmlOverflow = document.documentElement.style.overflow;
@@ -601,6 +652,10 @@ document.addEventListener('click', function(e) {
     if (!viewerOpen) return false;
     viewerOpen = false;
     lightbox.classList.remove('open');
+    if (activeMediaEl && activeMediaEl.tagName === 'VIDEO') {
+      activeMediaEl.pause();
+    }
+    lbInner.innerHTML = '';
     unlockPage();
     resetZoom();
     var y = savedScrollY;
@@ -611,13 +666,13 @@ document.addEventListener('click', function(e) {
     return true;
   }
   function openViewer(index) {
-    if (!galleryImages.length) return;
+    if (!galleryCards.length) return;
     savedScrollY = window.scrollY || window.pageYOffset || 0;
-    lockPage(); viewerOpen = true; lightbox.classList.add('open'); showImage(index);
+    lockPage(); viewerOpen = true; lightbox.classList.add('open'); showMedia(index);
     if (!historyPushed) { history.pushState({ aphLb: 1 }, ''); historyPushed = true; }
   }
   function navigate(delta) {
-    if (viewerOpen && galleryImages.length > 1) showImage(currentIndex + delta);
+    if (viewerOpen && galleryCards.length > 1) showMedia(currentIndex + delta);
   }
   function distance(a,b) {
     return Math.hypot(b.clientX-a.clientX, b.clientY-a.clientY);
@@ -626,16 +681,11 @@ document.addEventListener('click', function(e) {
     return { x:(a.clientX+b.clientX)/2, y:(a.clientY+b.clientY)/2 };
   }
 
-  galleryImages.forEach(function(img, index) {
-    img.addEventListener('click', function(e) {
+  galleryCards.forEach(function(card, index) {
+    card.addEventListener('click', function(e) {
       if (Date.now() < suppressClickUntil) { e.preventDefault(); return; }
       openViewer(index);
     });
-  });
-
-  lbImg.addEventListener('dblclick', function(e) {
-    e.preventDefault();
-    if (scale > 1) resetZoom(); else { scale = 2; applyTransform(); }
   });
 
   lbInner.addEventListener('wheel', function(e) {
@@ -656,7 +706,7 @@ document.addEventListener('click', function(e) {
     moved = false;
     if (e.touches.length === 2) {
       gestureMode='pinch'; startDistance=distance(e.touches[0],e.touches[1]);
-      startScale=scale; startTranslateX=translateX; startTranslateY=translateY; e.preventDefault();
+      startScale=scale; e.preventDefault();
     } else if (e.touches.length === 1) {
       gestureMode='single'; startX=e.touches[0].clientX; startY=e.touches[0].clientY;
     }
