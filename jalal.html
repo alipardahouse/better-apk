@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Al-Amin</title>
+<title>Jalal</title>
 <style>
 :root {
   --br:    #2c1f14;
@@ -19,13 +19,13 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { 
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-  background: var(--cream); 
-  color: var(--br); 
-  min-height: 100vh; 
-  max-width: 600px; 
-  margin: 0 auto; 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--cream);
+  color: var(--br);
+  min-height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
   box-shadow: 0 0 20px rgba(0,0,0,0.15);
 }
 
@@ -158,32 +158,34 @@ nav {
 .sh-eyebrow { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
 .sh-title { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--br); }
 
-.product-grid { 
-  padding: 0 16px 28px; 
-  display: grid; 
-  grid-template-columns: repeat(2, 1fr) !important; 
-  gap: 10px; 
+.product-grid {
+  padding: 0 16px 28px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px;
 }
 
 .curtain-card {
   border-radius: 8px;
   overflow: hidden;
-  cursor: pointer;
+  cursor: zoom-in;
   background: #000;
   position: relative;
   touch-action: pan-y;
   height: 180px;
+  -webkit-tap-highlight-color: transparent;
 }
-.curtain-card img, .curtain-card video { 
-  width: 100%; 
-  height: 100%; 
-  object-fit: cover; 
-  object-position: center top; 
-  display: block; 
+.curtain-card img, .curtain-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
   transition: transform 0.3s ease;
   -webkit-user-drag: none;
   user-select: none;
   -webkit-touch-callout: none;
+  pointer-events: none; /* every tap lands on the card itself, so it always opens */
 }
 .curtain-card:hover img, .curtain-card:hover video { transform: scale(1.03); }
 
@@ -220,6 +222,7 @@ nav {
 .footer-bottom { background: #0e0906; padding: 14px 16px; text-align: center; border-top: 1px solid rgba(184,154,94,.08); }
 .footer-bottom p { font-size: 10px; color: rgba(255,255,255,.3); }
 
+/* ===== LIGHTBOX ===== */
 .lightbox {
   display: none; position: fixed; inset: 0; z-index: 999;
   width: 100vw; height: 100dvh;
@@ -237,6 +240,24 @@ nav {
   width: auto; height: auto; border-radius: 0; object-fit: contain;
   transform: translate3d(0,0,0) scale(1); transform-origin: center center;
   will-change: transform; user-select: none; -webkit-user-drag: none; touch-action: none;
+}
+.lb-btn {
+  position: absolute; z-index: 5;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(26,18,8,.65); color: var(--gold);
+  border: 1px solid rgba(184,154,94,.4);
+  font-size: 22px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.lb-btn:hover { background: rgba(26,18,8,.9); color: var(--gold2); }
+.lb-close { top: 12px; right: 12px; }
+.lb-prev  { left: 10px;  top: 50%; transform: translateY(-50%); }
+.lb-next  { right: 10px; top: 50%; transform: translateY(-50%); }
+.lb-count {
+  position: absolute; z-index: 5; top: 20px; left: 16px;
+  font-size: 12px; letter-spacing: .08em; color: rgba(255,255,255,.7);
+  background: rgba(26,18,8,.55); padding: 4px 10px; border-radius: 12px;
 }
 </style>
 </head>
@@ -293,185 +314,33 @@ nav {
   <a href="PERSONAL DATA.html" class="mob-link">Personal Data</a>
   <a href="prompts.html" class="mob-link">Prompts</a>
 
-  <a href="tel:03458584520" class="nav-cta-mob">📞 Get a Quote</a>
+  <a href="tel:+923458584520" class="nav-cta-mob">📞 Get a Quote</a>
 </div>
 
 <section class="page-hero" id="top">
   <p class="eyebrow">Timeless Simplicity</p>
-  <h1>Al-Amin</h1>
-  <p>Explore our full showcase of elegant, versatile Al-Amin curtains crafted to bring subtle warmth and sophistication to any room.</p>
+  <h1>Jalal</h1>
+  <p>Explore our full showcase of elegant, versatile Jalal curtains crafted to bring subtle warmth and sophistication to any room.</p>
 </section>
 
-<div class="category-block" id="Al-Amin">
+<div class="category-block" id="Jalal">
   <div class="section-header">
     <p class="sh-eyebrow">Full Catalog</p>
-    <h2 class="sh-title">Al-Amin</h2>
+    <h2 class="sh-title">Jalal</h2>
   </div>
-  <div class="product-grid">
-    <!-- AAP MOVIES YA IMAGES ISI TARAH DALEIN: DATA-SRC MAIN MP4 YA JPG PATH DEDEIN -->
-    <div class="curtain-card" data-src="videos/jalal1.mp4" data-alt="Jalal Video 1"></div>
-    <div class="curtain-card"><img src="images/jalal1.jpg" alt="Jalal 1" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal2.jpg" alt="Jalal 2" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal3.jpg" alt="Jalal 3" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal4.jpg" alt="Jalal 4" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal5.jpg" alt="Jalal 5" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal6.jpg" alt="Jalal 6" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal7.jpg" alt="Jalal 7" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal8.jpg" alt="Jalal 8" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal9.jpg" alt="Jalal 9" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal10.jpg" alt="Jalal 10" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal11.jpg" alt="Jalal 11" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal12.jpg" alt="Jalal 12" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal13.jpg" alt="Jalal 13" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal14.jpg" alt="Jalal 14" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal15.jpg" alt="Jalal 15" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal16.jpg" alt="Jalal 16" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal17.jpg" alt="Jalal 17" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal18.jpg" alt="Jalal 18" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal19.jpg" alt="Jalal 19" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal20.jpg" alt="Jalal 20" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal21.jpg" alt="Jalal 21" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal22.jpg" alt="Jalal 22" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal23.jpg" alt="Jalal 23" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal24.jpg" alt="Jalal 24" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal25.jpg" alt="Jalal 25" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal26.jpg" alt="Jalal 26" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal27.jpg" alt="Jalal 27" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal28.jpg" alt="Jalal 28" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal29.jpg" alt="Jalal 29" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal30.jpg" alt="Jalal 30" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal31.jpg" alt="Jalal 31" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal32.jpg" alt="Jalal 32" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal33.jpg" alt="Jalal 33" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal34.jpg" alt="Jalal 34" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal35.jpg" alt="Jalal 35" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal36.jpg" alt="Jalal 36" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal37.jpg" alt="Jalal 37" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal38.jpg" alt="Jalal 38" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal39.jpg" alt="Jalal 39" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal40.jpg" alt="Jalal 40" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal41.jpg" alt="Jalal 41" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal42.jpg" alt="Jalal 42" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal43.jpg" alt="Jalal 43" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal44.jpg" alt="Jalal 44" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal45.jpg" alt="Jalal 45" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal46.jpg" alt="Jalal 46" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal47.jpg" alt="Jalal 47" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal48.jpg" alt="Jalal 48" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal49.jpg" alt="Jalal 49" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal50.jpg" alt="Jalal 50" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal51.jpg" alt="Jalal 51" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal52.jpg" alt="Jalal 52" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal53.jpg" alt="Jalal 53" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal54.jpg" alt="Jalal 54" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal55.jpg" alt="Jalal 55" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal56.jpg" alt="Jalal 56" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal57.jpg" alt="Jalal 57" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal58.jpg" alt="Jalal 58" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal59.jpg" alt="Jalal 59" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal60.jpg" alt="Jalal 60" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal61.jpg" alt="Jalal 61" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal62.jpg" alt="Jalal 62" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal63.jpg" alt="Jalal 63" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal64.jpg" alt="Jalal 64" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal65.jpg" alt="Jalal 65" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal66.jpg" alt="Jalal 66" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal67.jpg" alt="Jalal 67" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal68.jpg" alt="Jalal 68" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal69.jpg" alt="Jalal 69" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal70.jpg" alt="Jalal 70" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal71.jpg" alt="Jalal 71" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal72.jpg" alt="Jalal 72" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal73.jpg" alt="Jalal 73" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal74.jpg" alt="Jalal 74" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal75.jpg" alt="Jalal 75" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal76.jpg" alt="Jalal 76" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal77.jpg" alt="Jalal 77" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal78.jpg" alt="Jalal 78" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal79.jpg" alt="Jalal 79" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal80.jpg" alt="Jalal 80" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal81.jpg" alt="Jalal 81" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal82.jpg" alt="Jalal 82" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal83.jpg" alt="Jalal 83" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal84.jpg" alt="Jalal 84" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal85.jpg" alt="Jalal 85" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal86.jpg" alt="Jalal 86" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal87.jpg" alt="Jalal 87" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal88.jpg" alt="Jalal 88" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal89.jpg" alt="Jalal 89" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal90.jpg" alt="Jalal 90" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal91.jpg" alt="Jalal 91" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal92.jpg" alt="Jalal 92" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal93.jpg" alt="Jalal 93" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal94.jpg" alt="Jalal 94" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal95.jpg" alt="Jalal 95" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal96.jpg" alt="Jalal 96" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal97.jpg" alt="Jalal 97" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal98.jpg" alt="Jalal 98" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal99.jpg" alt="Jalal 99" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal100.jpg" alt="Jalal 100" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal101.jpg" alt="Jalal 101" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal102.jpg" alt="Jalal 102" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal103.jpg" alt="Jalal 103" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal104.jpg" alt="Jalal 104" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal105.jpg" alt="Jalal 105" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal106.jpg" alt="Jalal 106" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal107.jpg" alt="Jalal 107" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal108.jpg" alt="Jalal 108" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal109.jpg" alt="Jalal 109" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal110.jpg" alt="Jalal 110" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal111.jpg" alt="Jalal 111" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal112.jpg" alt="Jalal 112" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal113.jpg" alt="Jalal 113" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal114.jpg" alt="Jalal 114" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal115.jpg" alt="Jalal 115" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal116.jpg" alt="Jalal 116" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal117.jpg" alt="Jalal 117" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal118.jpg" alt="Jalal 118" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal119.jpg" alt="Jalal 119" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal120.jpg" alt="Jalal 120" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal121.jpg" alt="Jalal 121" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal122.jpg" alt="Jalal 122" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal123.jpg" alt="Jalal 123" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal124.jpg" alt="Jalal 124" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal125.jpg" alt="Jalal 125" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal126.jpg" alt="Jalal 126" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal127.jpg" alt="Jalal 127" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal128.jpg" alt="Jalal 128" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal129.jpg" alt="Jalal 129" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal130.jpg" alt="Jalal 130" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal131.jpg" alt="Jalal 131" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal132.jpg" alt="Jalal 132" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal133.jpg" alt="Jalal 133" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal134.jpg" alt="Jalal 134" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal135.jpg" alt="Jalal 135" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal136.jpg" alt="Jalal 136" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal137.jpg" alt="Jalal 137" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal138.jpg" alt="Jalal 138" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal139.jpg" alt="Jalal 139" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal140.jpg" alt="Jalal 140" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal141.jpg" alt="Jalal 141" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal142.jpg" alt="Jalal 142" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal143.jpg" alt="Jalal 143" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal144.jpg" alt="Jalal 144" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal145.jpg" alt="Jalal 145" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal146.jpg" alt="Jalal 146" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal147.jpg" alt="Jalal 147" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal148.jpg" alt="Jalal 148" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal149.jpg" alt="Jalal 149" data-target="Jalal.html"></div>
-<div class="curtain-card"><img src="images/jalal150.jpg" alt="Jalal 150" data-target="Jalal.html"></div>
 
-  </div>
+  <!-- Cards are generated by the script below: 1 video (jalal1.mp4) + jalal1.jpg ... jalal150.jpg -->
+  <div class="product-grid" id="productGrid"></div>
 </div>
 
 <div class="section-divider"></div>
 
 <div class="cta-bar">
-  <h3>Interested in Al-Amin Curtains?</h3>
+  <h3>Interested in Jalal Curtains?</h3>
   <p>Free measurement · Custom sizing</p>
   <div class="cta-buttons">
-    <a class="btn-wa" href="https://wa.me/923458584520?text=Hello%20Ali%20Parda%20House%21%20I%20am%20interested%20in%20your%20Plain%20Curtains%20Collection." target="_blank" rel="noopener">WhatsApp Us</a>
-    <a class="btn-call" href="tel:03458584520">Call Now</a>
+    <a class="btn-wa" href="https://wa.me/923458584520?text=Hello%20Ali%20Parda%20House%21%20I%20am%20interested%20in%20your%20Jalal%20Collection." target="_blank" rel="noopener">WhatsApp Us</a>
+    <a class="btn-call" href="tel:+923458584520">Call Now</a>
   </div>
 </div>
 
@@ -507,7 +376,7 @@ nav {
       <span class="f-contact-icon">📍</span>
       <span>Ali Parda House Bhimber, near purana hathi gate</span>
     </div>
-    <a href="tel:03458584520" class="f-contact-row">
+    <a href="tel:+923458584520" class="f-contact-row">
       <span class="f-contact-icon">📞</span>
       <span>0345-8584520</span>
     </a>
@@ -520,11 +389,30 @@ nav {
 
 <!-- Lightbox Modal Container -->
 <div class="lightbox" id="lightbox">
+  <div class="lb-count" id="lbCount"></div>
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next">&#8250;</button>
   <div class="lb-inner" id="lb-inner"></div>
 </div>
 
 <script>
-/* Navigation Hamburger Toggle */
+/* ===================== SCROLL LOCK (shared by all overlays) ===================== */
+var openOverlays = new Set();
+function lockScroll(id) {
+  openOverlays.add(id);
+  document.body.style.overflow = 'hidden';
+  document.documentElement.style.overflow = 'hidden';
+}
+function unlockScroll(id) {
+  openOverlays.delete(id);
+  if (openOverlays.size === 0) {
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }
+}
+
+/* ===================== NAVIGATION HAMBURGER ===================== */
 var hamburgerBtn = document.getElementById('hamburgerBtn');
 var mobileNav = document.getElementById('mobileNav');
 
@@ -548,217 +436,316 @@ document.addEventListener('click', function(e) {
   }
 });
 
-/* Helper Function to Check Video Extensions */
+/* ===================== GALLERY SETTINGS ===================== */
+var IMG_FOLDER = 'images/';
+var IMG_PREFIX = 'jalal';
+var IMG_EXT    = '.jpg';
+var IMG_COUNT  = 150;
+var VIDEO_SRC  = 'images/jalal1.mp4';   // set to '' if you do not want the video card
+
 function isVideo(url) {
-  return /\.(mp4|webm|ogg|mov)$/i.test(url);
+  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url || '');
 }
 
-/* Render Cards dynamically with Video or Image */
-var cards = Array.prototype.slice.call(document.querySelectorAll('.curtain-card'));
+/* ===================== BUILD CARDS ===================== */
+var grid = document.getElementById('productGrid');
 
-cards.forEach(function(card) {
-  var src = card.getAttribute('data-src');
-  var alt = card.getAttribute('data-alt') || 'Curtain';
+function createCard(src, alt, eager) {
+  var card = document.createElement('div');
+  card.className = 'curtain-card';
+  card.setAttribute('data-src', src);
+  card.setAttribute('data-alt', alt);
 
-  if (!src) return;
-
+  var el;
   if (isVideo(src)) {
-    var video = document.createElement('video');
-    video.src = src;
-    video.autoplay = true;
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    card.appendChild(video);
+    el = document.createElement('video');
+    el.src = src;
+    el.autoplay = true;
+    el.loop = true;
+    el.muted = true;
+    el.setAttribute('muted', '');
+    el.playsInline = true;
+    el.setAttribute('playsinline', '');
+    el.preload = 'metadata';
   } else {
-    var img = document.createElement('img');
-    img.src = src;
-    img.alt = alt;
-    card.appendChild(img);
+    el = document.createElement('img');
+    el.src = src;
+    el.alt = alt;
+    el.loading = eager ? 'eager' : 'lazy';
+    el.decoding = 'async';
   }
-});
+  el.addEventListener('error', function() {
+    card.classList.add('broken');
+    card.style.display = 'none';
+    console.log('Missing file: ' + src);
+  });
+  card.appendChild(el);
+  grid.appendChild(card);
+  return card;
+}
 
-/* Lightbox Script Supporting both Images and Videos */
+if (VIDEO_SRC) createCard(VIDEO_SRC, 'Jalal Video 1', true);
+for (var n = 1; n <= IMG_COUNT; n++) {
+  createCard(IMG_FOLDER + IMG_PREFIX + n + IMG_EXT, 'Jalal ' + n, n <= 4);
+}
+
+/* ===================== LIGHTBOX (open, swipe, zoom, pan) ===================== */
 (function() {
   var lightbox = document.getElementById('lightbox');
-  var lbInner = document.getElementById('lb-inner');
-  var activeMediaEl = null;
-  var galleryCards = cards;
-  var currentIndex = -1, viewerOpen = false, historyPushed = false, skipPop = 0;
-  var savedScrollY = 0, savedBodyOverflow = '', savedHtmlOverflow = '';
-  var scale = 1, maxScale = 4, translateX = 0, translateY = 0;
-  var startDistance = 0, startScale = 1;
-  var startX = 0, startY = 0, gestureMode = '', moved = false, suppressClickUntil = 0;
+  var lbInner  = document.getElementById('lb-inner');
+  var lbCount  = document.getElementById('lbCount');
+  var lbClose  = document.getElementById('lbClose');
+  var lbPrev   = document.getElementById('lbPrev');
+  var lbNext   = document.getElementById('lbNext');
+
+  var allCards = Array.prototype.slice.call(document.querySelectorAll('.curtain-card'));
+  var list = [];                 // cards that are actually working
+  var currentIndex = -1;
+  var viewerOpen = false, historyPushed = false, skipPop = 0, savedScrollY = 0;
+  var media = null;
+
+  var scale = 1, maxScale = 5, tx = 0, ty = 0;
+  var baseTx = 0, baseTy = 0;
+  var mode = '', startX = 0, startY = 0, moved = false;
+  var pinchStartDist = 0, pinchStartScale = 1;
+  var lastTap = 0, suppressClickUntil = 0;
+  var mouseDown = false;
 
   function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
   function applyTransform() {
-    if (activeMediaEl) {
-      activeMediaEl.style.transform = 'translate3d(' + translateX + 'px,' + translateY + 'px,0) scale(' + scale + ')';
-    }
-  }
-  function resetZoom() {
-    scale = 1; translateX = 0; translateY = 0; applyTransform();
+    if (media) media.style.transform = 'translate3d(' + tx + 'px,' + ty + 'px,0) scale(' + scale + ')';
   }
   function fitTranslation() {
-    if (scale <= 1 || !activeMediaEl) { translateX = 0; translateY = 0; return; }
-    var r = activeMediaEl.getBoundingClientRect();
-    var maxX = Math.max(0, (r.width * scale - lbInner.clientWidth) / 2);
-    var maxY = Math.max(0, (r.height * scale - lbInner.clientHeight) / 2);
-    translateX = clamp(translateX, -maxX, maxX);
-    translateY = clamp(translateY, -maxY, maxY);
+    if (!media || scale <= 1) { tx = 0; ty = 0; return; }
+    var maxX = Math.max(0, (media.offsetWidth  * scale - lbInner.clientWidth)  / 2);
+    var maxY = Math.max(0, (media.offsetHeight * scale - lbInner.clientHeight) / 2);
+    tx = clamp(tx, -maxX, maxX);
+    ty = clamp(ty, -maxY, maxY);
+  }
+  function resetZoom() { scale = 1; tx = 0; ty = 0; applyTransform(); }
+
+  function zoomAt(clientX, clientY, newScale) {
+    newScale = clamp(newScale, 1, maxScale);
+    var rect = lbInner.getBoundingClientRect();
+    var px = clientX - (rect.left + rect.width / 2);
+    var py = clientY - (rect.top + rect.height / 2);
+    var ratio = newScale / scale;
+    tx = (tx - px) * ratio + px;
+    ty = (ty - py) * ratio + py;
+    scale = newScale;
+    fitTranslation();
+    applyTransform();
+  }
+  function toggleZoom(clientX, clientY) {
+    if (scale > 1) resetZoom(); else zoomAt(clientX, clientY, 2.5);
   }
 
   function showMedia(index) {
-    if (!galleryCards.length) return;
-    currentIndex = (index + galleryCards.length) % galleryCards.length;
-    lbInner.innerHTML = ''; // clear previous media
-    
-    var card = galleryCards[currentIndex];
+    if (!list.length) return;
+    currentIndex = (index + list.length) % list.length;
+    var card = list[currentIndex];
     var src = card.getAttribute('data-src');
+    var alt = card.getAttribute('data-alt') || '';
+
+    if (media && media.tagName === 'VIDEO') media.pause();
+    lbInner.innerHTML = '';
 
     if (isVideo(src)) {
-      activeMediaEl = document.createElement('video');
-      activeMediaEl.src = src;
-      activeMediaEl.autoplay = true;
-      activeMediaEl.loop = true;
-      activeMediaEl.muted = true;
-      activeMediaEl.playsInline = true;
-      activeMediaEl.controls = true;
+      media = document.createElement('video');
+      media.src = src;
+      media.autoplay = true;
+      media.loop = true;
+      media.muted = true;
+      media.playsInline = true;
+      media.controls = true;
     } else {
-      activeMediaEl = document.createElement('img');
-      activeMediaEl.src = src;
-      activeMediaEl.alt = card.getAttribute('data-alt') || '';
+      media = document.createElement('img');
+      media.src = src;
+      media.alt = alt;
     }
-
+    media.draggable = false;
+    lbInner.appendChild(media);
     resetZoom();
-    lbInner.appendChild(activeMediaEl);
 
-    // Double click to zoom
-    activeMediaEl.addEventListener('dblclick', function(e) {
+    media.addEventListener('dblclick', function(e) {
       e.preventDefault();
-      if (scale > 1) resetZoom(); else { scale = 2; applyTransform(); }
+      toggleZoom(e.clientX, e.clientY);
     });
+
+    lbCount.textContent = (currentIndex + 1) + ' / ' + list.length;
+    var multi = list.length > 1;
+    lbPrev.style.display = multi ? 'flex' : 'none';
+    lbNext.style.display = multi ? 'flex' : 'none';
   }
 
-  function lockPage() {
-    savedBodyOverflow = document.body.style.overflow;
-    savedHtmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
+  function openViewer(card) {
+    list = allCards.filter(function(c) { return !c.classList.contains('broken'); });
+    var index = list.indexOf(card);
+    if (index < 0) return;
+    savedScrollY = window.scrollY || window.pageYOffset || 0;
+    lockScroll('lightbox');
+    viewerOpen = true;
+    lightbox.classList.add('open');
+    showMedia(index);
+    if (!historyPushed) { history.pushState({ aphLb: 1 }, ''); historyPushed = true; }
   }
-  function unlockPage() {
-    document.body.style.overflow = savedBodyOverflow;
-    document.documentElement.style.overflow = savedHtmlOverflow;
-  }
+
   function closeViewer(fromPopstate) {
     if (!viewerOpen) return false;
     viewerOpen = false;
     lightbox.classList.remove('open');
-    if (activeMediaEl && activeMediaEl.tagName === 'VIDEO') {
-      activeMediaEl.pause();
-    }
+    if (media && media.tagName === 'VIDEO') media.pause();
     lbInner.innerHTML = '';
-    unlockPage();
-    resetZoom();
+    media = null;
+    scale = 1; tx = 0; ty = 0;
+    unlockScroll('lightbox');
     var y = savedScrollY;
     requestAnimationFrame(function() { window.scrollTo(0, y); });
     if (historyPushed && !fromPopstate) {
       historyPushed = false; skipPop++; history.back();
-    } else historyPushed = false;
+    } else {
+      historyPushed = false;
+    }
     return true;
   }
-  function openViewer(index) {
-    if (!galleryCards.length) return;
-    savedScrollY = window.scrollY || window.pageYOffset || 0;
-    lockPage(); viewerOpen = true; lightbox.classList.add('open'); showMedia(index);
-    if (!historyPushed) { history.pushState({ aphLb: 1 }, ''); historyPushed = true; }
-  }
+
   function navigate(delta) {
-    if (viewerOpen && galleryCards.length > 1) showMedia(currentIndex + delta);
-  }
-  function distance(a,b) {
-    return Math.hypot(b.clientX-a.clientX, b.clientY-a.clientY);
-  }
-  function midpoint(a,b) {
-    return { x:(a.clientX+b.clientX)/2, y:(a.clientY+b.clientY)/2 };
+    if (viewerOpen && list.length > 1) showMedia(currentIndex + delta);
   }
 
-  galleryCards.forEach(function(card, index) {
+  function distance(a, b) { return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY); }
+  function midpoint(a, b) { return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 }; }
+
+  /* ---- open from ANY card (the whole card is clickable) ---- */
+  allCards.forEach(function(card) {
     card.addEventListener('click', function(e) {
       if (Date.now() < suppressClickUntil) { e.preventDefault(); return; }
-      openViewer(index);
+      openViewer(card);
     });
   });
 
+  /* ---- buttons ---- */
+  lbClose.addEventListener('click', function(e) { e.stopPropagation(); closeViewer(false); });
+  lbPrev.addEventListener('click',  function(e) { e.stopPropagation(); navigate(-1); });
+  lbNext.addEventListener('click',  function(e) { e.stopPropagation(); navigate(1); });
+
+  /* ---- keyboard ---- */
+  document.addEventListener('keydown', function(e) {
+    if (!viewerOpen) return;
+    if (e.key === 'Escape') closeViewer(false);
+    else if (e.key === 'ArrowLeft') navigate(-1);
+    else if (e.key === 'ArrowRight') navigate(1);
+    else if (e.key === '+' || e.key === '=') { var r = lbInner.getBoundingClientRect(); zoomAt(r.left + r.width / 2, r.top + r.height / 2, scale * 1.4); }
+    else if (e.key === '-') { var r2 = lbInner.getBoundingClientRect(); zoomAt(r2.left + r2.width / 2, r2.top + r2.height / 2, scale / 1.4); }
+  });
+
+  /* ---- mouse wheel zoom ---- */
   lbInner.addEventListener('wheel', function(e) {
     if (!viewerOpen) return;
     e.preventDefault();
-    var oldScale = scale;
-    var newScale = clamp(oldScale * (e.deltaY < 0 ? 1.15 : 1/1.15), 1, maxScale);
-    if (newScale === oldScale) return;
-    var rect = lbInner.getBoundingClientRect();
-    var px = e.clientX-(rect.left+rect.width/2), py = e.clientY-(rect.top+rect.height/2);
-    translateX = (translateX-px)*(newScale/oldScale)+px;
-    translateY = (translateY-py)*(newScale/oldScale)+py;
-    scale = newScale; fitTranslation(); applyTransform();
-  }, {passive:false});
+    zoomAt(e.clientX, e.clientY, scale * (e.deltaY < 0 ? 1.15 : 1 / 1.15));
+  }, { passive: false });
 
+  /* ---- mouse drag to pan when zoomed ---- */
+  lbInner.addEventListener('mousedown', function(e) {
+    if (!viewerOpen || scale <= 1 || e.button !== 0) return;
+    mouseDown = true; startX = e.clientX; startY = e.clientY; baseTx = tx; baseTy = ty;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!mouseDown) return;
+    tx = baseTx + (e.clientX - startX);
+    ty = baseTy + (e.clientY - startY);
+    fitTranslation(); applyTransform();
+  });
+  window.addEventListener('mouseup', function() { mouseDown = false; });
+
+  /* ---- touch: pinch zoom, pan, swipe, double-tap ---- */
   lbInner.addEventListener('touchstart', function(e) {
     if (!viewerOpen) return;
     moved = false;
     if (e.touches.length === 2) {
-      gestureMode='pinch'; startDistance=distance(e.touches[0],e.touches[1]);
-      startScale=scale; e.preventDefault();
+      mode = 'pinch';
+      pinchStartDist = distance(e.touches[0], e.touches[1]);
+      pinchStartScale = scale;
+      e.preventDefault();
     } else if (e.touches.length === 1) {
-      gestureMode='single'; startX=e.touches[0].clientX; startY=e.touches[0].clientY;
+      mode = 'single';
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      baseTx = tx; baseTy = ty;
     }
-  }, {passive:false});
+  }, { passive: false });
 
   lbInner.addEventListener('touchmove', function(e) {
     if (!viewerOpen) return;
-    if (e.touches.length===2 && gestureMode==='pinch') {
-      var oldScale=scale, d=distance(e.touches[0],e.touches[1]);
-      scale=clamp(startScale*(d/startDistance),1,maxScale);
-      var m=midpoint(e.touches[0],e.touches[1]), rect=lbInner.getBoundingClientRect();
-      var px=m.x-(rect.left+rect.width/2), py=m.y-(rect.top+rect.height/2), ratio=scale/oldScale;
-      translateX=(translateX-px)*ratio+px; translateY=(translateY-py)*ratio+py;
-      fitTranslation(); applyTransform(); moved=true; e.preventDefault(); return;
+    if (e.touches.length === 2 && mode === 'pinch') {
+      var m = midpoint(e.touches[0], e.touches[1]);
+      var d = distance(e.touches[0], e.touches[1]);
+      zoomAt(m.x, m.y, pinchStartScale * (d / pinchStartDist));
+      moved = true;
+      e.preventDefault();
+      return;
     }
-    if (e.touches.length===1 && gestureMode==='single') {
-      var dx=e.touches[0].clientX-startX, dy=e.touches[0].clientY-startY;
-      if (scale>1) {
-        translateX=dx; translateY=dy; fitTranslation(); applyTransform(); moved=true; e.preventDefault();
-      } else if (Math.abs(dx)>8 || Math.abs(dy)>8) {
-        moved=true; if (Math.abs(dx)>Math.abs(dy)) e.preventDefault();
+    if (e.touches.length === 1 && mode === 'single') {
+      var dx = e.touches[0].clientX - startX;
+      var dy = e.touches[0].clientY - startY;
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) moved = true;
+      if (scale > 1) {
+        tx = baseTx + dx; ty = baseTy + dy;
+        fitTranslation(); applyTransform();
+        e.preventDefault();
+      } else if (Math.abs(dx) > Math.abs(dy)) {
+        e.preventDefault();
       }
     }
-  }, {passive:false});
+  }, { passive: false });
 
   lbInner.addEventListener('touchend', function(e) {
     if (!viewerOpen) return;
-    if (gestureMode==='pinch') {
-      if (e.touches.length===1) {
-        gestureMode='single'; startX=e.touches[0].clientX; startY=e.touches[0].clientY;
-      } else gestureMode='';
-      suppressClickUntil=Date.now()+250; return;
+    if (mode === 'pinch') {
+      if (e.touches.length === 1) {
+        mode = 'single';
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+        baseTx = tx; baseTy = ty;
+      } else {
+        mode = '';
+      }
+      suppressClickUntil = Date.now() + 250;
+      return;
     }
-    if (gestureMode==='single' && e.changedTouches.length) {
-      var dx=e.changedTouches[0].clientX-startX, dy=e.changedTouches[0].clientY-startY;
-      if (scale===1 && Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.2) {
-        suppressClickUntil=Date.now()+350; navigate(dx<0 ? 1 : -1);
-      } else if (moved) suppressClickUntil=Date.now()+250;
+    if (mode === 'single' && e.changedTouches.length) {
+      var t = e.changedTouches[0];
+      var dx = t.clientX - startX, dy = t.clientY - startY;
+
+      if (!moved) {
+        /* tap: double-tap toggles zoom */
+        var now = Date.now();
+        if (now - lastTap < 300) { toggleZoom(t.clientX, t.clientY); lastTap = 0; }
+        else lastTap = now;
+      } else if (scale === 1 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+        suppressClickUntil = Date.now() + 350;
+        navigate(dx < 0 ? 1 : -1);
+      } else if (scale === 1 && dy > 100 && Math.abs(dy) > Math.abs(dx) * 1.5) {
+        suppressClickUntil = Date.now() + 350;
+        closeViewer(false);
+      } else {
+        suppressClickUntil = Date.now() + 250;
+      }
     }
-    gestureMode='';
-  }, {passive:false});
+    mode = '';
+  }, { passive: false });
 
   lbInner.addEventListener('touchcancel', function() {
-    gestureMode=''; suppressClickUntil=Date.now()+250;
-  }, {passive:true});
+    mode = ''; suppressClickUntil = Date.now() + 250;
+  }, { passive: true });
 
   window.addEventListener('resize', function() {
     if (viewerOpen) { fitTranslation(); applyTransform(); }
   });
 
+  /* ---- phone back button closes the viewer first ---- */
   window.addEventListener('popstate', function() {
     if (skipPop > 0) { skipPop--; return; }
     if (viewerOpen) closeViewer(true);
