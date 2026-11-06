@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stock Cutter</title>
+<style>
+:root{
+  --bg:#1b1f2a; --panel:#262c3a; --field:#f4f1ea; --field-text:#1b1f2a;
+  --text:#e8eaf0; --muted:#9aa3b8; --accent:#14b8a6; --accent-text:#06201c;
+  --danger:#e5534b; --border:#3a4256;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{text-align:center;color:var(--accent);margin:8px 0 16px;font-size:26px}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:12px}
+.card h2{margin:0 0 4px;font-size:15px}
+.hint{color:var(--muted);font-size:12.5px;margin:0 0 8px}
+.row{display:grid;grid-template-columns:1fr 1fr 32px;gap:6px;margin-bottom:6px}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rules label,.single label{font-size:12.5px;color:var(--muted);display:block;margin-bottom:3px}
+input,textarea{background:var(--field);color:var(--field-text);border:1px solid var(--border);border-radius:6px;padding:7px 8px;font-size:15px;width:100%}
+input:focus,textarea:focus{outline:2px solid var(--accent)}
+button{border:0;border-radius:6px;padding:8px 14px;font-weight:600;font-size:14px;cursor:pointer}
+button:hover{filter:brightness(1.1)}
+.ok{background:var(--accent);color:var(--accent-text)}
+.danger{background:var(--danger);color:#fff}
+.ghost{background:transparent;color:var(--accent);border:1px dashed var(--accent);width:100%;margin-top:2px}
+.x{background:transparent;color:var(--muted);padding:0;font-size:20px}
+.x:hover{color:var(--danger)}
+.actions{display:flex;gap:8px}.actions button{flex:1}
+textarea{min-height:560px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:14px;white-space:pre}
+.btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.btns button{flex:1;min-width:90px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Stock Cutter</h1>
+<div class="grid">
+  <div>
+    <div class="card">
+      <h2>Bars already in hand</h2>
+      <p class="hint">Bars/offcuts you already have. These are always used before new stock.</p>
+      <div id="haveList"></div>
+      <button type="button" class="ghost" id="addHave">+ Add bar in hand</button>
+    </div>
+    <div class="card">
+      <h2>Use shorter bars</h2>
+      <p class="hint">If a bar (in hand or new stock) is shorter than a needed piece by up to this much, it is used as-is instead of cutting a longer bar. Results update automatically. Leave empty to allow exact matches only.</p>
+      <div class="single"><label for="shortTol">Max shortfall</label><input id="shortTol" inputmode="numeric"></div>
+    </div>
+    <div class="card">
+      <h2>New stock lengths</h2>
+      <p class="hint">Lengths you can buy/cut new. Leave quantity empty if unlimited.</p>
+      <div id="stockList"></div>
+      <button type="button" class="ghost" id="addStock">+ Add stock length</button>
+    </div>
+    <div class="card">
+      <h2>Pieces to cut</h2>
+      <p class="hint">Press Enter to move to the next field.</p>
+      <div id="pieceList"></div>
+      <button type="button" class="ghost" id="addPiece">+ Add piece</button>
+    </div>
+    <div class="card">
+      <h2>Remnant rule (optional)</h2>
+      <p class="hint">Leftover on each bar must be scrap (0 to max) or a reusable offcut (min or more). Leave both empty for no rule.</p>
+      <div class="rules">
+        <div><label for="maxScrap">Max scrap</label><input id="maxScrap" inputmode="numeric"></div>
+        <div><label for="minReuse">Min reusable offcut</label><input id="minReuse" inputmode="numeric"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="button" class="danger" id="reset">Reset</button>
+          </div>
+  </div>
+  <div>
+    <textarea id="out" placeholder="Result..." wrap="off" readonly></textarea>
+    <div class="btns">
+      <button type="button" class="danger" id="clear">Clear</button>
+      <button type="button" class="ok" id="copy">Copy</button>
+      <button type="button" class="ok" id="print">Print</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const CFG = {
+  have:  {list:'#haveList',  a:'Bar length',   b:'Qty'},
+  stock: {list:'#stockList', a:'Stock length', b:'Qty (optional)'},
+  piece: {list:'#pieceList', a:'Piece length', b:'Amount'}
+};
+const KIND_BY_ID = {haveList:'have', stockList:'stock', pieceList:'piece'};
+const INIT = {have:1, stock:1, piece:5};
+
+function addRow(kind, focus){
+  const c = CFG[kind], list = $(c.list);
+  const d = document.createElement('div'); d.className = 'row';
+  d.innerHTML = '<input class="a" inputmode="numeric" placeholder="'+c.a+'">'+
+                '<input class="b" inputmode="numeric" placeholder="'+c.b+'">'+
+                '<button type="button" class="x" title="Remove">\u00d7</button>';
+  list.appendChild(d);
+  if(focus) d.querySelector('.a').focus();
+}
+function initRows(){
+  for(const k in CFG){ $(CFG[k].list).innerHTML=''; for(let i=0;i<INIT[k];i++) addRow(k); }
+}
+
+// digits only + Enter navigation + remove buttons
+document.addEventListener('input', e=>{
+  if(e.target.matches('input[inputmode=numeric]')) e.target.value = e.target.value.replace(/\D/g,'');
+});
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Enter' || !e.target.matches('input')) return;
+  e.preventDefault();
+  const all = [...document.querySelectorAll('input')];
+  const i = all.indexOf(e.target);
+  if(i === all.length-1) return;
+  const list = e.target.closest('#haveList,#stockList,#pieceList');
+  if(list && e.target.classList.contains('b') && e.target.closest('.row')===list.lastElementChild){
+    addRow(KIND_BY_ID[list.id], true); return;
+  }
+  const next = all[i+1]; next.focus(); next.select && next.select();
+});
+document.addEventListener('click', e=>{
+  if(e.target.classList.contains('x')){
+    const row = e.target.closest('.row'), list = row.parentElement;
+    if(list.children.length>1) row.remove();
+    else row.querySelectorAll('input').forEach(i=>i.value='');
+  }
+});
+$('#addHave').onclick  = ()=>addRow('have', true);
+$('#addStock').onclick = ()=>addRow('stock', true);
+$('#addPiece').onclick = ()=>addRow('piece', true);
+
+function readRows(sel, unlimitedIfEmpty){
+  const m = new Map();
+  document.querySelectorAll(sel+' .row').forEach(r=>{
+    const len = parseInt(r.querySelector('.a').value,10);
+    const bv = r.querySelector('.b').value;
+    if(!(len>0)) return;
+    let n = (unlimitedIfEmpty && bv==='') ? Infinity : parseInt(bv,10);
+    if(!(n>0)) return;
+    m.set(len, (m.get(len)||0) + n);   // duplicate lengths are merged
+  });
+  return m;
+}
+
+// Best set of pieces for one bar: must contain the SMALLEST remaining piece,
+// remnant must be 0..maxScrap or >= minReuse. Exact subset-sum (bounded knapsack).
+function bestFill(need, lens, L, maxScrap, minReuse){
+  const first = lens.find(l=>need.get(l)>0);
+  const room = L - first;
+  const chunks = [];
+  for(const len of lens){
+    let c = need.get(len) - (len===first?1:0);
+    c = Math.min(c, Math.floor(room/len));
+    for(let k=1; c>0; k*=2){ const t=Math.min(k,c); chunks.push({len, k:t}); c-=t; }
+  }
+  const reach = new Int32Array(L+1).fill(-1);
+  reach[first] = -2;
+  chunks.forEach((ch,idx)=>{
+    const v = ch.len*ch.k;
+    for(let s=L-v; s>=first; s--) if(reach[s]!==-1 && reach[s+v]===-1) reach[s+v]=idx;
+  });
+  for(let s=L; s>=first; s--){
+    const r = L - s;
+    if(reach[s]!==-1 && (r<=maxScrap || r>=minReuse)){
+      const count = new Map([[first,1]]);
+      let t = s;
+      while(t!==first){ const ch=chunks[reach[t]]; count.set(ch.len,(count.get(ch.len)||0)+ch.k); t-=ch.len*ch.k; }
+      return {sum:s, count};
+    }
+  }
+  return null;
+}
+function plainFill(need, lens, L){          // fallback: simple first-fit, rule not guaranteed
+  const count = new Map(); let sum=0;
+  for(const len of lens){
+    const n = Math.min(need.get(len), Math.floor((L-sum)/len));
+    if(n>0){ count.set(len,n); sum+=n*len; }
+  }
+  return {sum, count};
+}
+
+function cut(){
+  try{ $('#out').value = build(); }
+  catch(err){ $('#out').value = 'Error: '+err.message; }
+}
+
+function build(){
+  const maxScrapRaw = $('#maxScrap').value, minReuseRaw = $('#minReuse').value;
+  const ruleOn = maxScrapRaw!=='' || minReuseRaw!=='';
+  const maxScrap = parseInt(maxScrapRaw||'0',10);
+  const minReuse = parseInt(minReuseRaw||'0',10);
+  const tol = parseInt($('#shortTol').value||'0',10);
+
+  const haveMap  = readRows('#haveList', false);
+  const stockMap = readRows('#stockList', true);
+  const pieceMap = readRows('#pieceList', false);
+  if(!pieceMap.size) return '';
+  if(!stockMap.size && !haveMap.size) return 'Enter at least one bar in hand or one new stock length.';
+
+  const need = new Map(pieceMap);
+  const haveLeft = new Map(haveMap);
+  const stockLeft = new Map(stockMap);
+
+  // ---- Phase 1: use whole bars as-is (exact, or shorter by <= tol) ----
+  // in-hand bars first, then new stock lengths; smallest shortfall first
+  const subs = [];
+  function substitute(srcMap, isHave){
+    const pairs = [];
+    for(const S of srcMap.keys()) for(const P of pieceMap.keys()){
+      const short = P - S;
+      if(short>=0 && short<=tol) pairs.push({S,P,short});
+    }
+    pairs.sort((x,y)=>x.short-y.short || y.P-x.P);
+    for(const p of pairs){
+      const n = Math.min(srcMap.get(p.S), need.get(p.P));
+      if(n>0){
+        srcMap.set(p.S, srcMap.get(p.S)-n);
+        need.set(p.P, need.get(p.P)-n);
+        subs.push({have:isHave, len:p.S, piece:p.P, n, short:p.short});
+      }
+    }
+  }
+  substitute(haveLeft, true);
+  substitute(stockLeft, false);
+
+  // ---- remaining stock: in-hand first, then new ----
+  const stocks = [];
+  haveLeft.forEach((qty,len)=>{ if(qty>0) stocks.push({len,qty,used:0,have:true}); });
+  stockLeft.forEach((qty,len)=>{ if(qty>0) stocks.push({len,qty,used:0,have:false}); });
+
+  let left = [...need.values()].reduce((a,b)=>a+b,0);
+  const lens = [...pieceMap.keys()].sort((a,b)=>a-b);   // ascending: smallest first
+
+  if(left>0){
+    const longest = stocks.length ? Math.max(...stocks.map(s=>s.len)) : 0;
+    const tooLong = lens.filter(l=>need.get(l)>0 && l>longest);
+    if(stocks.length && tooLong.length){
+      return 'These pieces are longer than your longest available bar ('+longest+'): '+tooLong.join(', ');
+    }
+  }
+
+  const bars = [];
+  let outOfStock = false;
+  while(left>0 && bars.length<5000){
+    const first = lens.find(l=>need.get(l)>0);
+    let best = null;
+    for(const group of [true,false]){          // in-hand first, then new stock
+      for(const st of stocks){
+        if(st.have!==group || st.qty-st.used<=0 || st.len<first) continue;
+        const c = bestFill(need, lens, st.len, maxScrap, ruleOn?minReuse:0);
+        if(!c) continue;
+        const r = st.len - c.sum;
+        const cost = ruleOn ? (r<=maxScrap ? r : r*0.5) : r;
+        if(!best || cost<best.cost || (cost===best.cost && st.len<best.st.len)) best={st,c,cost,ok:true};
+      }
+      if(best) break;
+    }
+    if(!best){
+      const st = stocks.filter(s=>s.qty-s.used>0 && s.len>=first)
+                       .sort((a,b)=>(b.have-a.have)||(a.len-b.len))[0];
+      if(!st){ outOfStock = true; break; }
+      best = {st, c:plainFill(need,lens,st.len), ok:false};
+    }
+    const arr = [];
+    best.c.count.forEach((n,len)=>{ need.set(len,need.get(len)-n); left-=n; for(let i=0;i<n;i++) arr.push(len); });
+    arr.sort((a,b)=>a-b);
+    best.st.used++;
+    bars.push({len:best.st.len, pieces:arr, sum:best.c.sum, ok:best.ok, have:best.st.have});
+  }
+
+  // ---- report ----
+  const pad = (n,w)=>String(n).padStart(w,'0');
+  let o = '';
+  if(haveMap.size){
+    o += 'Bars in hand:\n';
+    [...haveMap].sort((a,b)=>b[0]-a[0]).forEach(([l,q])=>{ o += '  '+l+' x '+q+'\n'; });
+  }
+  if(stockMap.size){
+    o += (o?'\n':'')+'New stock available:\n';
+    [...stockMap].sort((a,b)=>b[0]-a[0]).forEach(([l,q])=>{ o += '  '+l+(q===Infinity?' (unlimited)':' x '+q)+'\n'; });
+  }
+  o += (tol>0 ? 'Max shortfall allowed: '+tol : 'Shortfall not allowed (exact matches only)')+'\n';
+  if(ruleOn) o += 'Remnant rule: scrap 0-'+maxScrap+', reusable offcut '+minReuse+'+\n';
+  o += '\nOrder:\n';
+  lens.forEach(l=>{ o += '  '+l+' x '+pieceMap.get(l)+' pcs.\n'; });
+
+  if(subs.length){
+    o += '\nWhole bars used as-is (no cutting):\n';
+    subs.forEach(s=>{
+      o += '  '+s.len+(s.have?' (in hand)':' (new)')+' used for '+s.piece+' x '+s.n+(s.short? ' (short by '+s.short+' each)':' (exact)')+'\n';
+    });
+  }
+
+  o += '\nCutting:\n';
+  let scrap=0, offcut=0, other=0, newTotal=0, newCount=0, bad=0;
+  const newUsed = new Map();
+  subs.forEach(s=>{ if(!s.have){ newCount+=s.n; newTotal+=s.len*s.n; newUsed.set(s.len,(newUsed.get(s.len)||0)+s.n); } });
+  if(!bars.length) o += '  (nothing to cut)\n';
+  bars.forEach((b,i)=>{
+    const r = b.len-b.sum;
+    if(!b.have){ newTotal+=b.len; newCount++; newUsed.set(b.len,(newUsed.get(b.len)||0)+1); }
+    let tag='';
+    if(ruleOn){
+      if(r<=maxScrap){ scrap+=r; tag=' (scrap)'; }
+      else if(r>=minReuse){ offcut+=r; tag=' (reusable offcut)'; }
+      else { bad++; tag=' (RULE NOT MET)'; }
+    } else other+=r;
+    o += pad(i+1,2)+') ['+b.len+(b.have?' in hand':' new')+'] '+b.pieces.join(', ')+' = '+b.sum+' | remnant '+r+tag+'\n';
+  });
+
+  o += '\nSummary:\n';
+  const inHandUsed = subs.filter(s=>s.have).reduce((a,s)=>a+s.n,0) + bars.filter(b=>b.have).length;
+  if(haveMap.size) o += '  Bars in hand used: '+inHandUsed+'\n';
+  [...newUsed].sort((a,b)=>b[0]-a[0]).forEach(([l,n])=>{ o += '  New '+l+' x '+n+' = '+(l*n)+'\n'; });
+  o += '  New stock total: '+newCount+' pcs. = '+newTotal+'\n';
+  o += ruleOn ? '  Scrap: '+scrap+' | Reusable offcuts: '+offcut+'\n' : '  Total remnant (cut bars): '+other+'\n';
+  if(bad) o += '\nWARNING: '+bad+' bar(s) could not meet the remnant rule with the lengths available.\n';
+  if(outOfStock){
+    o += '\nWARNING: not enough stock for:\n';
+    lens.forEach(l=>{ if(need.get(l)>0) o += '  '+l+' x '+need.get(l)+'\n'; });
+  }
+  o += '\nMaterial loss per cut (blade) is not counted.';
+  return o;
+}
+
+// ---- automatic calculation: runs on every change, no Cut button ----
+let timer = null;
+function schedule(){ clearTimeout(timer); timer = setTimeout(cut, 200); }
+document.addEventListener('input', schedule);
+document.addEventListener('click', e=>{ if(e.target.classList.contains('x')) schedule(); });
+
+$('#reset').onclick = ()=>{ initRows(); $('#maxScrap').value=''; $('#minReuse').value=''; $('#shortTol').value=''; $('#out').value=''; };
+$('#clear').onclick = ()=>{ $('#out').value=''; };
+$('#copy').onclick = ()=>{
+  const t = $('#out'); t.select();
+  if(navigator.clipboard) navigator.clipboard.writeText(t.value).catch(()=>document.execCommand('copy'));
+  else document.execCommand('copy');
+};
+$('#print').onclick = ()=>{
+  const w = window.open('','_blank'); if(!w) return;
+  w.document.write('<pre style="font:14px monospace">'+$('#out').value.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre>');
+  w.document.close(); w.print();
+};
+initRows();
+</script>
+</body>
+</html>

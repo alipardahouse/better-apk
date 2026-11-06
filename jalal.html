@@ -2,25 +2,37 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jalal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jalal Curtains | Ali Parda House</title>
+<meta name="description" content="Browse the full Jalal curtain collection at Ali Parda House, Bhimber. Free measurement and custom sizing.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 :root {
   --br:    #2c1f14;
   --br2:   #1a1208;
+  --br3:   #0e0906;
   --gold:  #b89a5e;
   --gold2: #d4b87a;
   --cream: #f5f0e8;
   --cream2:#ede5d4;
   --muted: #7a6a55;
   --wh:    #ffffff;
+  --black: #000000;
+  --wa:    #25d366;
   --border:#ddd4c0;
   --nav-h: 60px;
+  --font-head: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   background: var(--cream);
   color: var(--br);
   min-height: 100vh;
@@ -29,6 +41,7 @@ body {
   box-shadow: 0 0 20px rgba(0,0,0,0.15);
 }
 
+/* ===== NAV ===== */
 nav {
   position: sticky;
   top: 0;
@@ -42,8 +55,8 @@ nav {
   border-bottom: 1px solid rgba(184,154,94,.2);
 }
 .nav-brand {
-  font-family: Georgia, serif;
-  font-size: 18px;
+  font-family: var(--font-head);
+  font-size: 22px;
   font-weight: 700;
   color: var(--wh);
   letter-spacing: .04em;
@@ -108,9 +121,11 @@ nav {
   padding: 10px 0 10px 8px;
   border-bottom: 1px solid rgba(255,255,255,.06);
   letter-spacing: .04em;
+  transition: color .2s, padding-left .2s;
 }
 .mobile-nav a:last-child { border-bottom: none; }
-.mobile-nav a:hover { color: var(--gold); }
+.mobile-nav a:hover { color: var(--gold); padding-left: 12px; }
+.mobile-nav a.active { color: var(--gold); font-weight: 500; }
 .mobile-nav a.nav-cta-mob {
   margin-top: 14px;
   background: var(--gold);
@@ -121,7 +136,9 @@ nav {
   border: none;
   font-weight: 600;
 }
+.mobile-nav a.nav-cta-mob:hover { background: var(--gold2); color: var(--br2); padding-left: 12px; }
 
+/* ===== HERO ===== */
 .page-hero {
   background: var(--br);
   padding: 36px 16px 30px;
@@ -135,8 +152,8 @@ nav {
   margin-bottom: 8px;
 }
 .page-hero h1 {
-  font-family: Georgia, serif;
-  font-size: 26px;
+  font-family: var(--font-head);
+  font-size: 34px;
   font-weight: 700;
   color: var(--wh);
   line-height: 1.2;
@@ -149,6 +166,7 @@ nav {
   line-height: 1.6;
 }
 
+/* ===== SECTION HEADER ===== */
 .section-header {
   padding: 28px 16px 16px;
   display: flex;
@@ -156,12 +174,14 @@ nav {
   gap: 4px;
 }
 .sh-eyebrow { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
-.sh-title { font-family: Georgia, serif; font-size: 22px; font-weight: 700; color: var(--br); }
+.sh-title { font-family: var(--font-head); font-size: 28px; font-weight: 700; color: var(--br); line-height: 1.1; }
+.sh-count { font-size: 11px; color: var(--muted); letter-spacing: .04em; min-height: 16px; }
 
+/* ===== GALLERY GRID ===== */
 .product-grid {
-  padding: 0 16px 28px;
+  padding: 0 16px 12px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
@@ -169,11 +189,16 @@ nav {
   border-radius: 8px;
   overflow: hidden;
   cursor: zoom-in;
-  background: #000;
+  background: var(--black);
   position: relative;
   touch-action: pan-y;
-  height: 180px;
+  aspect-ratio: 3 / 4;
   -webkit-tap-highlight-color: transparent;
+  animation: cardIn .4s ease both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 .curtain-card img, .curtain-card video {
   width: 100%;
@@ -189,44 +214,84 @@ nav {
 }
 .curtain-card:hover img, .curtain-card:hover video { transform: scale(1.03); }
 
+/* play badge shown on video cards */
+.play-badge {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 46px; height: 46px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(26,18,8,.65);
+  border: 1px solid rgba(184,154,94,.6);
+  color: var(--gold2);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  padding-left: 3px;
+  pointer-events: none;
+}
+.video-tag {
+  position: absolute;
+  top: 8px; left: 8px;
+  font-size: 9px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold2);
+  background: rgba(26,18,8,.7);
+  padding: 3px 8px; border-radius: 10px;
+  pointer-events: none;
+}
+
+.gallery-status {
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 16px 24px;
+  line-height: 1.6;
+}
+.gallery-status.hidden { display: none; }
+
 .section-divider { height: 1px; background: var(--border); margin: 0 16px; }
 
+/* ===== CTA ===== */
 .cta-bar { background: var(--gold); padding: 20px 16px; text-align: center; }
-.cta-bar h3 { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: var(--br2); margin-bottom: 2px; }
+.cta-bar h3 { font-family: var(--font-head); font-size: 24px; font-weight: 700; color: var(--br2); margin-bottom: 2px; }
 .cta-bar p { font-size: 11px; color: rgba(44,31,20,.7); margin-bottom: 14px; }
 .cta-buttons { display: flex; gap: 8px; justify-content: center; }
 .btn-wa, .btn-call {
   padding: 10px 16px; border-radius: 5px;
   font-size: 12px; font-weight: 600;
   text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  transition: transform .2s, opacity .2s;
 }
-.btn-wa { background: #25d366; color: #fff; }
+.btn-wa:hover, .btn-call:hover { transform: translateY(-2px); opacity: .9; }
+.btn-wa { background: var(--wa); color: var(--wh); }
 .btn-call { background: var(--br2); color: var(--gold); }
 
+/* ===== FOOTER ===== */
 .footer-main {
-  background: #1a1208;
+  background: var(--br2);
   padding: 32px 16px 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   border-top: 1px solid rgba(184,154,94,.15);
 }
-.f-logo { font-family: Georgia, serif; font-size: 18px; font-weight: 700; color: var(--gold); display: block; }
+.f-logo { font-family: var(--font-head); font-size: 24px; font-weight: 700; color: var(--gold); display: block; }
 .f-logo-sub { font-size: 9px; color: rgba(184,154,94,.5); letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; }
 .f-desc { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.6; }
-.f-col h4 { font-family: Georgia, serif; font-size: 15px; color: #fff; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(184,154,94,.15); }
+.f-col h4 { font-family: var(--font-head); font-size: 19px; color: var(--wh); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(184,154,94,.15); }
 .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.f-col ul li a { font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; }
-.f-contact-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; }
+.f-col ul li a { font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; transition: color .2s; }
+.f-col ul li a:hover { color: var(--gold); }
+.f-contact-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; transition: color .2s; }
+a.f-contact-row:hover { color: var(--gold); }
 .f-contact-icon { color: var(--gold); }
-.footer-bottom { background: #0e0906; padding: 14px 16px; text-align: center; border-top: 1px solid rgba(184,154,94,.08); }
+.footer-bottom { background: var(--br3); padding: 14px 16px; text-align: center; border-top: 1px solid rgba(184,154,94,.08); }
 .footer-bottom p { font-size: 10px; color: rgba(255,255,255,.3); }
 
 /* ===== LIGHTBOX ===== */
 .lightbox {
   display: none; position: fixed; inset: 0; z-index: 999;
-  width: 100vw; height: 100dvh;
-  background: #000; align-items: center; justify-content: center; padding: 0;
+  width: 100vw; height: 100vh; height: 100dvh;
+  background: var(--black); align-items: center; justify-content: center; padding: 0;
   overflow: hidden; overscroll-behavior: none; touch-action: none;
 }
 .lightbox.open { display: flex; }
@@ -249,6 +314,7 @@ nav {
   font-size: 22px; line-height: 1; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   -webkit-tap-highlight-color: transparent;
+  transition: background .2s, color .2s;
 }
 .lb-btn:hover { background: rgba(26,18,8,.9); color: var(--gold2); }
 .lb-close { top: 12px; right: 12px; }
@@ -259,59 +325,72 @@ nav {
   font-size: 12px; letter-spacing: .08em; color: rgba(255,255,255,.7);
   background: rgba(26,18,8,.55); padding: 4px 10px; border-radius: 12px;
 }
+
+@media (max-width: 380px) {
+  .page-hero h1 { font-size: 30px; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .btn-wa, .btn-call { width: 100%; max-width: 240px; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .curtain-card { animation: none; }
+  html { scroll-behavior: auto; }
+}
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-brand">Ali Parda <em>House</em></a>
-  <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu">
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/" class="nav-brand">Ali Parda <em>House</em></a>
+  <button class="nav-hamburger" id="hamburgerBtn" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
 <!-- ══ MOBILE NAV ══ -->
 <div class="mobile-nav" id="mobileNav">
-  <a href="index.html" class="mob-link">Home</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/" class="mob-link">Home</a>
 
-  <span class="mob-section-label">Curtains & Designs</span>
-  <a href="CNC.html" class="mob-link">CNC</a>
+  <span class="mob-section-label">Curtains &amp; Designs</span>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/cnc-printed-box-curtains/" class="mob-link">CNC</a>
   <a href="Fancy_Designs.html" class="mob-link">Fancy Designs</a>
-  <a href="Jali_Designs.html" class="mob-link">Jali Designs</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/jali-designs/" class="mob-link">Jali Designs</a>
   <a href="Jhahlar_Designs.html" class="mob-link">Jhahlar Designs</a>
   <a href="SOFA.html" class="mob-link">SOFA</a>
-  <a href="Wooden_Box.html" class="mob-link">Wooden Box</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/wooden-box-curtains/" class="mob-link">Wooden Box</a>
 
-  <span class="mob-section-label">Fabrics & Collections</span>
+  <span class="mob-section-label">Fabrics &amp; Collections</span>
   <a href="Al-Amin.html" class="mob-link">Al-Amin</a>
   <a href="Al-Gafoor.html" class="mob-link">Al-Gafoor</a>
   <a href="Barfi.html" class="mob-link">Barfi</a>
   <a href="Faisalabad-Texture.html" class="mob-link">Faisalabad Texture</a>
+  <a href="#top" class="mob-link active" aria-current="page">Jalal</a>
   <a href="Majlis.html" class="mob-link">Majlis</a>
   <a href="Pathan-Texture.html" class="mob-link">Pathan Texture</a>
-  <a href="Plain_Curtains.html" class="mob-link">Plain Curtains</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/simple-plain-curtains/" class="mob-link">Plain Curtains</a>
   <a href="Plain-Malai.html" class="mob-link">Plain Malai</a>
   <a href="Texture_Curtains.html" class="mob-link">Texture Curtains</a>
 
   <span class="mob-section-label">Blinds</span>
-  <a href="BLINDS.html" class="mob-link">All Blinds</a>
-  <a href="Roller Blinds.html" class="mob-link">Roller Blinds</a>
-  <a href="Vertical Blinds.html" class="mob-link">Vertical Blinds</a>
-  <a href="Wooden Blinds.html" class="mob-link">Wooden Blinds</a>
-  <a href="Zebra Blinds.html" class="mob-link">Zebra Blinds</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/blinds/" class="mob-link">All Blinds</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/roller-blinds-2/" class="mob-link">Roller Blinds</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/vertical-blinds-2/" class="mob-link">Vertical Blinds</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/wooden-venetian-blinds/" class="mob-link">Wooden Blinds</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/zebra-blinds-2/" class="mob-link">Zebra Blinds</a>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/blackout-blinds-2/" class="mob-link">Blackout Blinds</a>
 
   <span class="mob-section-label">Accessories</span>
+  <a href="https://alipardahouse.infinityfreeapp.com/wp/accessories/" class="mob-link">All Accessories</a>
   <a href="Pipes.html" class="mob-link">Pipes</a>
   <a href="Brackets.html" class="mob-link">Brackets</a>
-  <a href="Curtain Rings.html" class="mob-link">Curtain Rings</a>
-  <a href="double ring.html" class="mob-link">Double Ring</a>
+  <a href="Curtain%20Rings.html" class="mob-link">Curtain Rings</a>
+  <a href="double%20ring.html" class="mob-link">Double Ring</a>
   <a href="Stopers.html" class="mob-link">Stopers</a>
-  <a href="TIE HUKS.html" class="mob-link">Tie Hooks</a>
+  <a href="TIE%20HUKS.html" class="mob-link">Tie Hooks</a>
 
-  <span class="mob-section-label">Manage & System</span>
+  <span class="mob-section-label">Manage &amp; System</span>
   <a href="completed_work.html" class="mob-link">Completed Work</a>
   <a href="drive.html" class="mob-link">📁 Drive</a>
-  <a href="PERSONAL DATA.html" class="mob-link">Personal Data</a>
+  <a href="PERSONAL%20DATA.html" class="mob-link">Personal Data</a>
   <a href="prompts.html" class="mob-link">Prompts</a>
 
   <a href="tel:+923458584520" class="nav-cta-mob">📞 Get a Quote</a>
@@ -327,10 +406,12 @@ nav {
   <div class="section-header">
     <p class="sh-eyebrow">Full Catalog</p>
     <h2 class="sh-title">Jalal</h2>
+    <p class="sh-count" id="galleryCount"></p>
   </div>
 
-  <!-- Cards are generated by the script below: 1 video (jalal1.mp4) + jalal1.jpg ... jalal150.jpg -->
-  <div class="product-grid" id="productGrid"></div>
+  <!-- Cards are generated by the script below from the GALLERY settings -->
+  <div class="product-grid" id="grid-jalal"></div>
+  <p class="gallery-status" id="galleryStatus">Loading collection…</p>
 </div>
 
 <div class="section-divider"></div>
@@ -339,7 +420,7 @@ nav {
   <h3>Interested in Jalal Curtains?</h3>
   <p>Free measurement · Custom sizing</p>
   <div class="cta-buttons">
-    <a class="btn-wa" href="https://wa.me/923458584520?text=Hello%20Ali%20Parda%20House%21%20I%20am%20interested%20in%20your%20Jalal%20Collection." target="_blank" rel="noopener">WhatsApp Us</a>
+    <a class="btn-wa" id="waBtn" href="https://wa.me/923458584520" target="_blank" rel="noopener">WhatsApp Us</a>
     <a class="btn-call" href="tel:+923458584520">Call Now</a>
   </div>
 </div>
@@ -354,19 +435,19 @@ nav {
   <div class="f-col">
     <h4>Quick Links</h4>
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="index.html#section-blinds">Blinds</a></li>
-      <li><a href="index.html#section-pipes">Accessories</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/">Home</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/blinds/">Blinds</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/accessories/">Accessories</a></li>
     </ul>
   </div>
 
   <div class="f-col">
     <h4>Curtains</h4>
     <ul>
-      <li><a href="plain curtains.html">Simple Plain Curtains</a></li>
-      <li><a href="index.html#section-woodenbox">Wooden Box Curtains</a></li>
-      <li><a href="index.html#section-cnc">CNC Box Curtains</a></li>
-      <li><a href="index.html#section-jali">Jali Designs</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/simple-plain-curtains/">Simple Plain Curtains</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/wooden-box-curtains/">Wooden Box Curtains</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/cnc-printed-box-curtains/">CNC Box Curtains</a></li>
+      <li><a href="https://alipardahouse.infinityfreeapp.com/wp/jali-designs/">Jali Designs</a></li>
     </ul>
   </div>
 
@@ -388,7 +469,7 @@ nav {
 </div>
 
 <!-- Lightbox Modal Container -->
-<div class="lightbox" id="lightbox">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
   <div class="lb-count" id="lbCount"></div>
   <button class="lb-btn lb-close" id="lbClose" aria-label="Close">&times;</button>
   <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
@@ -416,78 +497,226 @@ function unlockScroll(id) {
 var hamburgerBtn = document.getElementById('hamburgerBtn');
 var mobileNav = document.getElementById('mobileNav');
 
+function closeMobileNav() {
+  mobileNav.classList.remove('open');
+  hamburgerBtn.classList.remove('open');
+  hamburgerBtn.setAttribute('aria-expanded', 'false');
+}
+
 hamburgerBtn.addEventListener('click', function(e) {
   e.stopPropagation();
-  mobileNav.classList.toggle('open');
-  hamburgerBtn.classList.toggle('open');
+  var isOpen = mobileNav.classList.toggle('open');
+  hamburgerBtn.classList.toggle('open', isOpen);
+  hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 });
 
 document.querySelectorAll('.mob-link').forEach(function(link) {
-  link.addEventListener('click', function() {
-    mobileNav.classList.remove('open');
-    hamburgerBtn.classList.remove('open');
-  });
+  link.addEventListener('click', closeMobileNav);
 });
 
 document.addEventListener('click', function(e) {
   if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-    mobileNav.classList.remove('open');
-    hamburgerBtn.classList.remove('open');
+    closeMobileNav();
   }
 });
 
-/* ===================== GALLERY SETTINGS ===================== */
-var IMG_FOLDER = 'images/';
-var IMG_PREFIX = 'jalal';
-var IMG_EXT    = '.jpg';
-var IMG_COUNT  = 150;
-var VIDEO_SRC  = 'images/jalal1.mp4';   // set to '' if you do not want the video card
+/* ===================== WHATSAPP LINK (message encoded) ===================== */
+document.getElementById('waBtn').href =
+  'https://wa.me/923458584520?text=' + encodeURIComponent('Hello Ali Parda House! I am interested in your Jalal Collection.');
 
+/* =====================================================================
+   GALLERY SETTINGS  —  THIS IS THE ONLY PART YOU EVER NEED TO EDIT
+   ---------------------------------------------------------------------
+   HOW TO ADD NEW PHOTOS / VIDEOS (no code change needed):
+     1. Upload the file into the  images/  folder.
+     2. Name it with the NEXT number in its series, for example:
+          jalal19.jpg, jalal20.jpg ...   (photos)
+          j32.jpg, j33.jpg ...           (photos)
+          jalal5.mp4, jalal6.mp4 ...     (videos)
+     3. Refresh the page. It is found and shown automatically.
+
+   FILES WITH A DIFFERENT NAME / FORMAT (png, webp, mov, "new-design.jpg"):
+     Just add the file path inside EXTRA_FILES below.
+   ===================================================================== */
+var GALLERY_FOLDER = 'images/';
+
+/* Each line = one numbered series. They are shown in this order. */
+var GALLERY = [
+  { prefix: 'jalal', ext: '.mp4', type: 'video', from: 1, label: 'Jalal Video' },   /* jalal1.mp4, jalal2.mp4 ... */
+  { prefix: 'jalal', ext: '.jpg', type: 'image', from: 1, label: 'Jalal' },          /* jalal1.jpg ... jalal18.jpg ... */
+  { prefix: 'j',     ext: '.jpg', type: 'image', from: 1, label: 'Jalal Design' }   /* j1.jpg ... j31.jpg ... */
+];
+
+/* Any one-off files (full path, relative to this page). Example:
+   var EXTRA_FILES = ['images/jalal-special.webp', 'images/showroom.mov']; */
+var EXTRA_FILES = [];
+
+/* Advanced scanner settings (leave as they are) */
+var MAX_GAP         = 8;    /* stop a series after this many missing numbers in a row */
+var FIRST_HIT_LIMIT = 40;   /* if a series has no file yet, try this many numbers before giving up */
+var MAX_NUMBER      = 500;  /* hard safety limit per series */
+var BATCH           = 6;    /* how many files are checked at the same time */
+
+/* ===================== HELPERS ===================== */
 function isVideo(url) {
-  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url || '');
+  return /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(url || '');
+}
+
+var grid        = document.getElementById('grid-jalal');
+var statusEl    = document.getElementById('galleryStatus');
+var countEl     = document.getElementById('galleryCount');
+var photoTotal  = 0;
+var videoTotal  = 0;
+
+function updateCount() {
+  var parts = [];
+  if (photoTotal) parts.push(photoTotal + (photoTotal === 1 ? ' photo' : ' photos'));
+  if (videoTotal) parts.push(videoTotal + (videoTotal === 1 ? ' video' : ' videos'));
+  countEl.textContent = parts.join(' · ');
+}
+
+/* ---- does this file exist? (fetch HEAD first, image/video probe as fallback) ---- */
+function probeFile(url, type) {
+  return new Promise(function(resolve) {
+    var done = false;
+    function finish(ok) { if (!done) { done = true; resolve(ok); } }
+    var el;
+    if (type === 'video') {
+      el = document.createElement('video');
+      el.preload = 'metadata';
+      el.muted = true;
+      el.onloadedmetadata = function() { finish(true); };
+    } else {
+      el = new Image();
+      el.onload = function() { finish(true); };
+    }
+    el.onerror = function() { finish(false); };
+    setTimeout(function() { finish(false); }, 10000);
+    el.src = url;
+  });
+}
+
+function checkFile(url, type) {
+  if (window.fetch && location.protocol !== 'file:') {
+    return fetch(url, { method: 'HEAD', cache: 'no-cache' }).then(function(r) {
+      if (!r.ok) return false;
+      var ct = (r.headers.get('content-type') || '').toLowerCase();
+      /* some hosts answer 200 with an HTML error page — reject that */
+      return !ct || ct.indexOf('image/') === 0 || ct.indexOf('video/') === 0 || ct.indexOf('octet-stream') === 0;
+    }).catch(function() {
+      return probeFile(url, type);
+    });
+  }
+  return probeFile(url, type);
 }
 
 /* ===================== BUILD CARDS ===================== */
-var grid = document.getElementById('productGrid');
-
-function createCard(src, alt, eager) {
+function createCard(src, alt, type, eager) {
   var card = document.createElement('div');
   card.className = 'curtain-card';
   card.setAttribute('data-src', src);
   card.setAttribute('data-alt', alt);
 
   var el;
-  if (isVideo(src)) {
+  if (type === 'video') {
     el = document.createElement('video');
-    el.src = src;
-    el.autoplay = true;
-    el.loop = true;
+    el.src = src + '#t=0.1';          /* show first frame as thumbnail */
     el.muted = true;
     el.setAttribute('muted', '');
     el.playsInline = true;
     el.setAttribute('playsinline', '');
     el.preload = 'metadata';
+    card.appendChild(el);
+
+    var tag = document.createElement('span');
+    tag.className = 'video-tag';
+    tag.textContent = 'Video';
+    var badge = document.createElement('span');
+    badge.className = 'play-badge';
+    badge.setAttribute('aria-hidden', 'true');
+    badge.innerHTML = '&#9658;';
+    card.appendChild(tag);
+    card.appendChild(badge);
+    videoTotal++;
   } else {
     el = document.createElement('img');
     el.src = src;
     el.alt = alt;
     el.loading = eager ? 'eager' : 'lazy';
     el.decoding = 'async';
+    card.appendChild(el);
+    photoTotal++;
   }
+
   el.addEventListener('error', function() {
-    card.classList.add('broken');
-    card.style.display = 'none';
+    if (card.parentNode) card.parentNode.removeChild(card);
+    if (type === 'video') videoTotal--; else photoTotal--;
+    updateCount();
     console.log('Missing file: ' + src);
   });
-  card.appendChild(el);
+
   grid.appendChild(card);
+  updateCount();
   return card;
 }
 
-if (VIDEO_SRC) createCard(VIDEO_SRC, 'Jalal Video 1', true);
-for (var n = 1; n <= IMG_COUNT; n++) {
-  createCard(IMG_FOLDER + IMG_PREFIX + n + IMG_EXT, 'Jalal ' + n, n <= 4);
+/* ---- scan one numbered series (jalal1.jpg, jalal2.jpg, ...) ---- */
+function scanSeries(g) {
+  return new Promise(function(resolve) {
+    var n = g.from, misses = 0, found = 0;
+
+    function step() {
+      if (n > MAX_NUMBER) { resolve(); return; }
+      var nums = [];
+      for (var i = 0; i < BATCH && n + i <= MAX_NUMBER; i++) nums.push(n + i);
+
+      Promise.all(nums.map(function(num) {
+        return checkFile(GALLERY_FOLDER + g.prefix + num + g.ext, g.type);
+      })).then(function(results) {
+        results.forEach(function(ok, i) {
+          if (ok) {
+            var num = nums[i];
+            createCard(GALLERY_FOLDER + g.prefix + num + g.ext, g.label + ' ' + num, g.type, grid.children.length < 4);
+            found++; misses = 0;
+          } else {
+            misses++;
+          }
+        });
+        n += BATCH;
+        if ((found && misses >= MAX_GAP) || (!found && misses >= FIRST_HIT_LIMIT)) { resolve(); return; }
+        step();
+      });
+    }
+    step();
+  });
 }
+
+/* ---- run all series in order, then the extra files ---- */
+function buildGallery() {
+  var chain = Promise.resolve();
+
+  GALLERY.forEach(function(g) {
+    chain = chain.then(function() { return scanSeries(g); });
+  });
+
+  EXTRA_FILES.forEach(function(path) {
+    chain = chain.then(function() {
+      var type = isVideo(path) ? 'video' : 'image';
+      return checkFile(path, type).then(function(ok) {
+        if (ok) createCard(path, 'Jalal', type, false);
+      });
+    });
+  });
+
+  chain.then(function() {
+    if (grid.children.length) {
+      statusEl.classList.add('hidden');
+    } else {
+      statusEl.textContent = 'No photos found yet. Upload your files into the "images" folder and refresh.';
+    }
+  });
+}
+buildGallery();
 
 /* ===================== LIGHTBOX (open, swipe, zoom, pan) ===================== */
 (function() {
@@ -498,8 +727,7 @@ for (var n = 1; n <= IMG_COUNT; n++) {
   var lbPrev   = document.getElementById('lbPrev');
   var lbNext   = document.getElementById('lbNext');
 
-  var allCards = Array.prototype.slice.call(document.querySelectorAll('.curtain-card'));
-  var list = [];                 // cards that are actually working
+  var list = [];                 // cards currently in the gallery
   var currentIndex = -1;
   var viewerOpen = false, historyPushed = false, skipPop = 0, savedScrollY = 0;
   var media = null;
@@ -541,6 +769,16 @@ for (var n = 1; n <= IMG_COUNT; n++) {
     if (scale > 1) resetZoom(); else zoomAt(clientX, clientY, 2.5);
   }
 
+  /* warm the cache for the neighbouring photos so swiping feels instant */
+  function preloadNeighbours() {
+    [1, -1].forEach(function(d) {
+      var c = list[(currentIndex + d + list.length) % list.length];
+      if (!c) return;
+      var s = c.getAttribute('data-src');
+      if (s && !isVideo(s)) { var im = new Image(); im.src = s; }
+    });
+  }
+
   function showMedia(index) {
     if (!list.length) return;
     currentIndex = (index + list.length) % list.length;
@@ -558,6 +796,7 @@ for (var n = 1; n <= IMG_COUNT; n++) {
       media.loop = true;
       media.muted = true;
       media.playsInline = true;
+      media.setAttribute('playsinline', '');
       media.controls = true;
     } else {
       media = document.createElement('img');
@@ -577,10 +816,11 @@ for (var n = 1; n <= IMG_COUNT; n++) {
     var multi = list.length > 1;
     lbPrev.style.display = multi ? 'flex' : 'none';
     lbNext.style.display = multi ? 'flex' : 'none';
+    preloadNeighbours();
   }
 
   function openViewer(card) {
-    list = allCards.filter(function(c) { return !c.classList.contains('broken'); });
+    list = Array.prototype.slice.call(grid.querySelectorAll('.curtain-card'));
     var index = list.indexOf(card);
     if (index < 0) return;
     savedScrollY = window.scrollY || window.pageYOffset || 0;
@@ -617,12 +857,12 @@ for (var n = 1; n <= IMG_COUNT; n++) {
   function distance(a, b) { return Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY); }
   function midpoint(a, b) { return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 }; }
 
-  /* ---- open from ANY card (the whole card is clickable) ---- */
-  allCards.forEach(function(card) {
-    card.addEventListener('click', function(e) {
-      if (Date.now() < suppressClickUntil) { e.preventDefault(); return; }
-      openViewer(card);
-    });
+  /* ---- open from ANY card (works for cards added later, too) ---- */
+  grid.addEventListener('click', function(e) {
+    var card = e.target.closest ? e.target.closest('.curtain-card') : null;
+    if (!card) return;
+    if (Date.now() < suppressClickUntil) { e.preventDefault(); return; }
+    openViewer(card);
   });
 
   /* ---- buttons ---- */
@@ -632,6 +872,7 @@ for (var n = 1; n <= IMG_COUNT; n++) {
 
   /* ---- keyboard ---- */
   document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobileNav();
     if (!viewerOpen) return;
     if (e.key === 'Escape') closeViewer(false);
     else if (e.key === 'ArrowLeft') navigate(-1);

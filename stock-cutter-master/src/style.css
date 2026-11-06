@@ -1,0 +1,106 @@
+/* ===== THEME: change these colors to restyle everything ===== */
+:root{
+    --bg:          #1b1f2a;   /* page background */
+    --panel:       #262c3a;   /* input panel */
+    --field:       #f4f1ea;   /* input / textarea background */
+    --field-text:  #1b1f2a;
+    --text:        #e8eaf0;
+    --accent:      #14b8a6;   /* main button (Cut / Copy / Print) */
+    --accent-text: #06201c;
+    --danger:      #e5534b;   /* Reset / Clear */
+    --danger-text: #ffffff;
+    --border:      #3a4256;
+}
+
+body
+{
+    background-color:var(--bg);
+    color:var(--text);
+    height:100vh;
+    display: flex;
+}
+
+h1{ color:var(--accent); }
+
+.main-wrapper{ margin: 0 auto; width: 95%; }
+
+#container{ margin-left:auto; margin-right:auto; height: max-content; }
+
+#input-top{ text-align:center; }
+
+#inputs
+{
+    margin-left: auto;
+    margin-right: auto;
+    width:300px;
+    padding:15px;
+    background-color:var(--panel);
+    border:1px solid var(--border);
+    font-size:15px;
+    border-radius:10px;
+    float:left;
+}
+
+#inputs input[type=text]
+{
+    font-size:15px;
+    width:80px;
+    text-align:center;
+    margin-top: 5px;
+    background-color:var(--field);
+    color:var(--field-text);
+    border:1px solid var(--border);
+    border-radius:4px;
+}
+
+#inputs input[type=text]:focus,
+#results-area:focus{
+    outline:2px solid var(--accent);
+}
+
+textarea{
+    font-size: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    resize: none;
+}
+
+#results-area
+{
+    resize:none;
+    border: 2px solid var(--border);
+    background-color:var(--field);
+    color:var(--field-text);
+    border-radius:5px;
+}
+
+.input-button{ margin-top:5px; width:100px; display:inline-block; }
+.input-button-2{ margin-top:5px; width:120px; }
+
+.input-button, .input-button-2{
+    border:none;
+    border-radius:6px;
+    padding:6px 0;
+    font-weight:600;
+    cursor:pointer;
+}
+[data-kind=ok]     { background-color:var(--accent); color:var(--accent-text); }
+[data-kind=danger] { background-color:var(--danger); color:var(--danger-text); }
+.input-button:hover, .input-button-2:hover{ filter:brightness(1.1); }
+
+#input-max-length{ width:60px !important; }
+
+[id|="input-minus"],[id|="input-plus"]
+{
+    width:30px;
+    height:30px;
+    margin-left: 5px;
+    border-radius:15px;
+    border: 2px solid var(--accent);
+    background-color:var(--field);
+    color:var(--field-text);
+    cursor:pointer;
+}
+
+#results{ margin: 0 auto; float:left; text-align:center; align-items: center; }

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fabric Cut Calculator</title>
+    <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
+</head>
+<body>
+    <!-- Packing algorithm: Copyright (c) 2018, Mapbox, ISC License (js/pack.js) -->
+    <script src="./js/pack.js"></script>
+    <script>
+
+        var n_box = 0;
+
+        function increment() {
+            n_box += 1;
+        }
+
+        function addField() {
+            var r = document.createElement('div');
+            var w = document.createElement('input');
+            var h = document.createElement('input');
+            var q = document.createElement('input');
+            var e1 = document.createElement('p');
+            var e2 = document.createElement('p');
+            var s1 = document.createElement('span');
+            var s2 = document.createElement('span');
+            var s3 = document.createElement('span');
+            w.setAttribute("type", "number");
+            h.setAttribute("type", "number");
+            q.setAttribute("type", "number");
+            w.setAttribute("min", "1");
+            h.setAttribute("min", "1");
+            q.setAttribute("min", "1");
+            q.setAttribute("max", "100");
+            w.setAttribute("onchange", "update();");
+            h.setAttribute("onchange", "update();");
+            q.setAttribute("onchange", "update();");
+            w.setAttribute("onkeyup", "this.onchange();");
+            h.setAttribute("onkeyup", "this.onchange();");
+            q.setAttribute("onkeyup", "this.onchange();");
+            w.setAttribute("onpaste", "this.onchange();");
+            h.setAttribute("onpaste", "this.onchange();");
+            q.setAttribute("onpaste", "this.onchange();");
+            w.setAttribute("oninput", "this.onchange();");
+            h.setAttribute("oninput", "this.onchange();");
+            q.setAttribute("oninput", "this.onchange();");
+            e1.setAttribute("class", "nospace_msg");
+            e2.setAttribute("class", "error_msg");
+            s1.innerHTML = 'W: ';
+            s2.innerHTML = ' H: ';
+            s3.innerHTML = ' Qty: ';
+            increment();
+            w.setAttribute("id", "box_width" + n_box);
+            h.setAttribute("id", "box_height" + n_box);
+            q.setAttribute("id", "box_count" + n_box);
+            e1.setAttribute("id", "nospace_msg" + n_box);
+            e2.setAttribute("id", "error_msg" + n_box);
+            r.appendChild(s1);
+            r.appendChild(w);
+            r.appendChild(s2);
+            r.appendChild(h);
+            r.appendChild(s3);
+            r.appendChild(q);
+            r.appendChild(e1);
+            r.appendChild(e2);
+            document.getElementById("form-div").appendChild(r);
+        }
+
+        function clearOutput() {
+            var canvas = document.getElementById('canvas');
+            canvas.width = 0;
+            canvas.height = 0;
+            canvas.style.width = '0px';
+            canvas.style.height = '0px';
+            document.getElementById('info').innerHTML = '';
+        }
+
+        function update() {
+
+            var fabric_width_raw = document.getElementById('fabric_width').value;
+            var fabric_width = parseFloat(fabric_width_raw);
+            var fabric_height = parseFloat(document.getElementById('fabric_height').value);
+            var fabric_error_message = document.getElementById("fabric_error_msg");
+
+            // validate fabric size
+            fabric_error_message.innerHTML = ``;
+            if (fabric_width_raw !== "" && (isNaN(fabric_width) || fabric_width < 1)) {
+                fabric_error_message.innerHTML = "Minimum value is 1.";
+            }
+            if (!isNaN(fabric_height) && fabric_height < 1) {
+                fabric_error_message.innerHTML = "Minimum value is 1.";
+            }
+
+            // nothing to calculate until a valid fabric width is entered
+            if (isNaN(fabric_width) || fabric_width < 1 || (!isNaN(fabric_height) && fabric_height < 1)) {
+                for (var k = 0; k <= n_box; k++) {
+                    document.getElementById("nospace_msg" + k).innerHTML = ``;
+                }
+                clearOutput();
+                return;
+            }
+
+            // color boxes by size
+            const col_start = 35;
+            const col_interval = n_box > 0 ? Math.round((80 - 20) / n_box) : 0;
+
+            let boxes = [];
+            var i;
+            for (i = 0; i < (n_box + 1); i++) {
+
+                var w_raw = document.getElementById('box_width' + i).value;
+                var h_raw = document.getElementById('box_height' + i).value;
+                var c_raw = document.getElementById('box_count' + i).value;
+
+                var box_w = parseFloat(w_raw);
+                var box_h = parseFloat(h_raw);
+                var box_c = parseFloat(c_raw);
+
+                var error_message = document.getElementById("error_msg" + i);
+                error_message.innerHTML = ``;
+
+                // completely empty row: skip silently
+                if (w_raw === "" && h_raw === "" && c_raw === "") continue;
+
+                try {
+                    if (isNaN(box_w) || isNaN(box_h) || isNaN(box_c)) throw "Please input numbers.";
+                    if (box_w < 1 || box_h < 1 || box_c < 1) throw "Minimum value is 1.";
+                    if (box_w > fabric_width) throw "Width exceeds fabric width.";
+                    if (!Number.isInteger(box_c)) throw "Number of rectangles must be a whole number.";
+                    if (box_c > 100) throw "Number of rectangles cannot exceed 100";
+
+                    var box_a = box_w * box_h;
+                    var bc;
+                    for (bc = 0; bc < box_c; bc += 1) {
+                        boxes.push({w: box_w, h: box_h, a: box_a, col: `hsl(195,100%,${i * col_interval + col_start}%)`});
+                    }
+                }
+                catch (err) {
+                    error_message.innerHTML = err;
+                }
+
+            }
+
+            // no valid rectangles yet
+            if (boxes.length === 0) {
+                for (var k2 = 0; k2 <= n_box; k2++) {
+                    document.getElementById("nospace_msg" + k2).innerHTML = ``;
+                }
+                clearOutput();
+                return;
+            }
+
+            var {w, h, fill} = potpack(boxes, fabric_width, fabric_height, hspace=1, vspace=0, hfuse=0, vfuse=1);
+
+            var leftover_total = 0;
+            var leftover_total_area = 0;
+
+            // identify boxes that can't fit
+            for (var j = 0; j < (n_box + 1); j++) {
+
+                var jw = parseFloat(document.getElementById('box_width' + j).value);
+                var jh = parseFloat(document.getElementById('box_height' + j).value);
+                var jc = parseFloat(document.getElementById('box_count' + j).value);
+
+                var nospace_message = document.getElementById("nospace_msg" + j);
+                var leftover = 0;
+                var leftover_area = 0;
+
+                for (const box$1 of boxes) {
+                    if (isNaN(box$1.x) && box$1.w == jw && box$1.h == jh) {
+                        leftover += 1;
+                        leftover_area += box$1.a;
+                    }
+                }
+                if (leftover > 0) {
+                    nospace_message.innerHTML = `${leftover} out of ${jc} excluded.`;
+                } else {
+                    nospace_message.innerHTML = ``;
+                }
+
+                leftover_total += leftover;
+                leftover_total_area += leftover_area;
+
+            }
+
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const cw = document.getElementById("container").clientWidth;
+            const ch = cw * h / w;
+
+            canvas.width = cw * 2;
+            canvas.height = ch * 2;
+            canvas.style.width = cw + 'px';
+            canvas.style.height = ch + 'px';
+            ctx.scale(2, 2);
+
+            const r = cw / w;
+
+            ctx.lineWidth = 0.5;
+            for (const box of boxes) {
+                if (isNaN(box.x)) continue;   // skip boxes that did not fit
+
+                ctx.beginPath();
+
+                // color
+                ctx.fillStyle = box.col;
+                ctx.rect(box.x * r, box.y * r, box.w * r, box.h * r);
+                ctx.fill();
+                ctx.stroke();
+
+                // text label
+                ctx.font = "12px Helvetica";
+                ctx.fillStyle = "#000";
+                ctx.textAlign = "center";
+                ctx.fillText(box.w + "W x " + box.h + "H", (box.x + (0.5 * box.w)) * r, (box.y + (0.5 * box.h)) * r);
+            }
+
+            // ---------- Remaining space labels ----------
+            // Group placed boxes into rows by their y position
+            const rows = {};
+            for (const b of boxes) {
+                if (isNaN(b.x)) continue;
+                if (!rows[b.y]) rows[b.y] = { y: b.y, h: b.h, right: 0 };
+                rows[b.y].h = Math.max(rows[b.y].h, b.h);
+                rows[b.y].right = Math.max(rows[b.y].right, b.x + b.w);
+            }
+
+            let remainingText = [];
+            let rowNo = 0;
+            let lowestY = 0;
+
+            Object.values(rows).sort((a, b) => a.y - b.y).forEach(row => {
+                rowNo += 1;
+                const remW = +(w - row.right).toFixed(2);
+                lowestY = Math.max(lowestY, row.y + row.h);
+
+                if (remW > 0) {
+                    const x1 = row.right * r;
+                    const x2 = w * r;
+                    const yMid = (row.y + row.h / 2) * r;
+
+                    // dashed line showing leftover width
+                    ctx.save();
+                    ctx.setLineDash([4, 3]);
+                    ctx.strokeStyle = "#d00";
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x1, yMid);
+                    ctx.lineTo(x2, yMid);
+                    ctx.stroke();
+                    ctx.restore();
+
+                    // label
+                    ctx.font = "bold 12px Helvetica";
+                    ctx.fillStyle = "#d00";
+                    ctx.textAlign = "center";
+                    ctx.fillText(remW + "W left", (x1 + x2) / 2, yMid - 4);
+
+                    remainingText.push(`Row ${rowNo}: <em>${remW}</em> width left`);
+                }
+            });
+
+            // leftover height at the bottom (only if fabric height was given)
+            if (!isNaN(fabric_height) && fabric_height > lowestY) {
+                const remH = +(fabric_height - lowestY).toFixed(2);
+                const yMid = (lowestY + remH / 2) * r;
+
+                ctx.font = "bold 12px Helvetica";
+                ctx.fillStyle = "#d00";
+                ctx.textAlign = "center";
+                ctx.fillText(remH + "H left (bottom)", (w * r) / 2, yMid);
+
+                remainingText.push(`Bottom: <em>${remH}</em> height left`);
+            }
+            // ---------- end remaining space ----------
+
+            document.getElementById('info').innerHTML = `
+            Packed <em>${boxes.length - leftover_total}</em> out of <em>${boxes.length}</em> rectangle(s), using <em>${Math.round((100 * (fill - leftover_total_area)) / (w * h))}%</em> of a <em>${w}x${h}</em> (WxH) fabric.
+            <br>${remainingText.join('<br>')}`;
+
+        }
+
+    </script>
+
+    <div id="container">
+
+        <div>
+            <h3>Fabric</h3>
+            <span>W: </span><input type="number" id="fabric_width" min="1" value="" placeholder="Width" onchange="update();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+            <span>H: </span>
+            <input type="number" id="fabric_height" min="1" value="" placeholder="Optional" onchange="update();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+            <p class="error_msg" id="fabric_error_msg"></p>
+        </div>
+        <br>
+        <div>
+            <h3>Rectangles to Cut</h3>
+            <div id="form-div">
+                <span>W: </span>
+                <input type="number" id="box_width0" min="1" value="" placeholder="Width" onchange="update();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+                <span>H: </span>
+                <input type="number" id="box_height0" min="1" value="" placeholder="Height" onchange="update();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+                <span>Qty: </span>
+                <input type="number" id="box_count0" min="1" max="100" value="" placeholder="Qty" onchange="update();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+                <p class="nospace_msg" id="nospace_msg0"></p>
+                <p class="error_msg" id="error_msg0"></p>
+            </div>
+        </div>
+
+        <div>
+            <button class="add-button" onclick="addField()">Add More</button>
+        </div>
+
+        <div id="gen-button-div">
+            <p>
+                <button class="gen-button" id="gen-button" onclick="update()">Generate</button>
+            </p>
+        </div>
+
+        <div>
+            <p id="info"></p>
+        </div>
+
+        <canvas id="canvas"></canvas>
+
+    </div>
+
+</body>
+</html>
