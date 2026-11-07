@@ -53,21 +53,24 @@ padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);letter-spacing:.04e
 h1{font-family:Georgia,serif;font-size:28px;color:var(--wh);line-height:1.2;margin-bottom:10px}
 h1 em{color:var(--gold);font-style:normal}
 .page-hero p:last-child{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
-.content{padding:24px 16px 32px}
+.content{padding:24px 16px 32px;display:flex;flex-direction:column;gap:12px}
+
+/* Clean Compact Prompt Cards */
 .prompt-card{background:var(--wh);border:1px solid var(--border);border-radius:10px;
-margin-bottom:18px;overflow:hidden;box-shadow:0 4px 12px rgba(44,31,20,.06)}
-.prompt-head{background:var(--br2);color:var(--gold);padding:13px 14px;display:flex;
-align-items:center;justify-content:space-between;gap:8px}
-.prompt-head h2{font-family:Georgia,serif;font-size:17px;color:var(--wh)}
-.copy-btn{background:var(--gold);color:var(--br2);border:0;border-radius:5px;padding:8px 11px;
-font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
-.copy-btn:active{transform:scale(.97)}
-.prompt-body{padding:14px}
-.prompt-text{white-space:pre-wrap;font-size:12px;line-height:1.65;color:var(--br);
-max-height:420px;overflow-y:auto}
-.empty-prompt{min-height:150px;border:2px dashed var(--gold);border-radius:6px;
-display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);
-font-size:13px;padding:20px;background:rgba(184,154,94,.05)}
+padding:14px 16px;box-shadow:0 2px 8px rgba(44,31,20,.05);display:flex;
+align-items:center;justify-content:space-between;gap:12px}
+.prompt-info{display:flex;align-items:center;gap:10px}
+.prompt-icon{width:36px;height:36px;border-radius:8px;background:rgba(184,154,94,.12);
+color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px}
+.prompt-title{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--br)}
+.prompt-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+.copy-btn{background:var(--gold);color:var(--br2);border:0;border-radius:6px;padding:9px 14px;
+font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s ease}
+.copy-btn:hover{background:var(--gold2)}
+.copy-btn:active{transform:scale(.96)}
+.copy-btn.copied{background:#27ae60;color:#fff}
+
 .footer-bottom{background:#0e0906;padding:14px 16px;text-align:center;border-top:1px solid rgba(184,154,94,.08)}
 .footer-bottom p{font-size:10px;color:rgba(255,255,255,.3)}
 </style>
@@ -135,9 +138,18 @@ font-size:13px;padding:20px;background:rgba(184,154,94,.05)}
 </section>
 
 <main class="content">
-<div class="prompt-card">
-<div class="prompt-head"><h2>Prompt 1</h2><button class="copy-btn" onclick="copyPrompt('prompt1',this)">📋 Copy Prompt</button></div>
-<div class="prompt-body"><div class="prompt-text" id="prompt1">TASK: REALISTIC CURTAIN REPLACEMENT / VIRTUAL INSTALLATION
+
+  <!-- Prompt 1 -->
+  <div class="prompt-card">
+    <div class="prompt-info">
+      <div class="prompt-icon">📋</div>
+      <div>
+        <div class="prompt-title">PARDY ON WINDOWS</div>
+        <div class="prompt-sub">Curtain Visualization</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('prompt1', this)">Copy Prompt</button>
+    <textarea id="prompt1" style="display:none;">TASK: REALISTIC CURTAIN REPLACEMENT / VIRTUAL INSTALLATION
 
 Use the provided WINDOW PHOTO as the exact base scene and the provided CURTAIN PHOTO as the exact curtain reference.
 
@@ -236,22 +248,102 @@ WINDOW PHOTO = unchanged base environment.
 CURTAIN PHOTO = exact product/design reference.
 Only modify the curtain placement, dimensions, perspective, folds and installation so it realistically fits the target window.
 
-The result must look like a genuine professional photograph, NOT an AI-generated redesign.</div></div>
-</div>
+The result must look like a genuine professional photograph, NOT an AI-generated redesign.</textarea>
+  </div>
 
-<div class="prompt-card">
-<div class="prompt-head"><h2>Prompt 2</h2><button class="copy-btn" onclick="copyPrompt('prompt2',this)">📋 Copy Prompt</button></div>
-<div class="prompt-body"><div class="empty-prompt" id="prompt2">Your next prompt will be added here.</div></div>
-</div><div class="prompt-card">
-<div class="prompt-head"><h2>Prompt 3</h2><button class="copy-btn" onclick="copyPrompt('prompt3',this)">📋 Copy Prompt</button></div>
-<div class="prompt-body"><div class="empty-prompt" id="prompt3">Your next prompt will be added here.</div></div>
-</div><div class="prompt-card">
-<div class="prompt-head"><h2>Prompt 4</h2><button class="copy-btn" onclick="copyPrompt('prompt4',this)">📋 Copy Prompt</button></div>
-<div class="prompt-body"><div class="empty-prompt" id="prompt4">Your next prompt will be added here.</div></div>
-</div><div class="prompt-card">
-<div class="prompt-head"><h2>Prompt 5</h2><button class="copy-btn" onclick="copyPrompt('prompt5',this)">📋 Copy Prompt</button></div>
-<div class="prompt-body"><div class="empty-prompt" id="prompt5">Your next prompt will be added here.</div></div>
-</div>
+  <!-- Prompt 2 -->
+  <div class="prompt-card">
+    <div class="prompt-info">
+      <div class="prompt-icon">📋</div>
+      <div>
+        <div class="prompt-title">PIPE CUTTING</div>
+        <div class="prompt-sub">1D PIPE Cutting Stock Optimizer</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('prompt2', this)">Copy Prompt</button>
+    <textarea id="prompt2" style="display:none;">You are an expert material cutting stock optimizer and bin-packing algorithm specialist. 
+
+I will provide you with a list of available stock lengths and required cut lengths. Your goal is to generate the most mathematically optimal 1D linear cutting plan that minimizes total stock consumed and minimizes overall waste/remnant.
+
+### STACK & PARAMETERS:
+1. Blade Kerf (Cut Loss): 0 mm
+2. Available Stock Quantities: Unlimited (unless specified otherwise)
+3. Cutting Goal: 100% material yield optimization using exact subset-sum / knapsack pattern allocation.
+
+---
+
+### INPUT DATA:
+
+[AVAILABLE STOCK LENGTHS]
+- 
+
+[REQUIRED CUTS (Length x Quantity)]
+- 
+
+---
+
+### YOUR INSTRUCTIONS:
+1. Parse all required cuts and available stock sizes.
+2. Group and combine cuts into stock bars such that total waste across all used bars is minimized.
+3. Prioritize combinations that result in 0 mm waste per bar first.
+4. Output your response strictly in the following clear format:
+
+---
+
+### EXPECTED OUTPUT FORMAT:
+
+**Cutting Plan:**
+01) [Stock Length] Cut Piece 1, Cut Piece 2, ... = Total Cut | remnant X
+02) [Stock Length] Cut Piece 1, Cut Piece 2, ... = Total Cut | remnant X
+...
+
+**Summary:**
+- Breakdown of Stock Used: [Length] x [Qty] = [Total Length]
+- Total Stock Material Used: X mm (Total Bars: Y pcs)
+- Total Required Cut Material: Z mm
+- Total Remnant (Waste): W mm (P%)
+- Material Yield: V%</textarea>
+  </div>
+
+  <!-- Prompt 3 -->
+  <div class="prompt-card">
+    <div class="prompt-info">
+      <div class="prompt-icon">📋</div>
+      <div>
+        <div class="prompt-title">Prompt 3</div>
+        <div class="prompt-sub">Empty Slot</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('prompt3', this)">Copy Prompt</button>
+    <textarea id="prompt3" style="display:none;"></textarea>
+  </div>
+
+  <!-- Prompt 4 -->
+  <div class="prompt-card">
+    <div class="prompt-info">
+      <div class="prompt-icon">📋</div>
+      <div>
+        <div class="prompt-title">Prompt 4</div>
+        <div class="prompt-sub">Empty Slot</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('prompt4', this)">Copy Prompt</button>
+    <textarea id="prompt4" style="display:none;"></textarea>
+  </div>
+
+  <!-- Prompt 5 -->
+  <div class="prompt-card">
+    <div class="prompt-info">
+      <div class="prompt-icon">📋</div>
+      <div>
+        <div class="prompt-title">Prompt 5</div>
+        <div class="prompt-sub">Empty Slot</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt('prompt5', this)">Copy Prompt</button>
+    <textarea id="prompt4" style="display:none;"></textarea>
+  </div>
+
 </main>
 
 <footer class="footer-bottom"><p>© 2001–2026 Ali Parda House · Crafted with elegance</p></footer>
@@ -265,20 +357,38 @@ hamburger.classList.toggle('open');mobileNav.classList.toggle('open');
 document.querySelectorAll('.mobile-nav a').forEach(a=>a.addEventListener('click',()=>{
 hamburger.classList.remove('open');mobileNav.classList.remove('open');
 }));
-function copyPrompt(id,button){
-const el=document.getElementById(id);
-const text=el.innerText;
-if(!text || text.includes('Your next prompt will be added here.')){
-button.textContent='Empty Prompt';setTimeout(()=>button.textContent='📋 Copy Prompt',1500);return;
-}
-navigator.clipboard.writeText(text).then(()=>{
-button.textContent='✓ Copied!';
-setTimeout(()=>button.textContent='📋 Copy Prompt',1500);
-}).catch(()=>{
-const area=document.createElement('textarea');area.value=text;document.body.appendChild(area);
-area.select();document.execCommand('copy');area.remove();
-button.textContent='✓ Copied!';setTimeout(()=>button.textContent='📋 Copy Prompt',1500);
-});
+
+function copyPrompt(id, button){
+  const el = document.getElementById(id);
+  const text = el.value.trim();
+  
+  if(!text){
+    button.textContent = 'Empty!';
+    setTimeout(() => button.textContent = 'Copy Prompt', 1500);
+    return;
+  }
+  
+  navigator.clipboard.writeText(text).then(() => {
+    button.textContent = '✓ Copied!';
+    button.classList.add('copied');
+    setTimeout(() => {
+      button.textContent = 'Copy Prompt';
+      button.classList.remove('copied');
+    }, 1500);
+  }).catch(() => {
+    const area = document.createElement('textarea');
+    area.value = text;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+    button.textContent = '✓ Copied!';
+    button.classList.add('copied');
+    setTimeout(() => {
+      button.textContent = 'Copy Prompt';
+      button.classList.remove('copied');
+    }, 1500);
+  });
 }
 </script>
 </body>
