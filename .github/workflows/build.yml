@@ -38,13 +38,12 @@ jobs:
           rm -rf build_app/www/*
 
           # Copy ALL repository files and folders into build_app/www/ 
-          # excluding the build_app directory itself, git metadata, and workflow files
           rsync -av --progress ./ build_app/www/ \
             --exclude 'build_app' \
             --exclude '.git' \
             --exclude '.github'
 
-          # If you have a custom config.xml in your root, copy it to the app root
+          # Copy config.xml to app root if it exists
           if [ -f "config.xml" ]; then
             cp config.xml build_app/
           fi
