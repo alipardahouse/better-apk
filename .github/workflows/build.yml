@@ -43,6 +43,11 @@ jobs:
             --exclude '.git' \
             --exclude '.github'
 
+          # Copy images folder to Cordova root so config.xml can find icons/splash screens
+          if [ -d "images" ]; then
+            cp -r images build_app/
+          fi
+
           # Copy config.xml to app root if it exists
           if [ -f "config.xml" ]; then
             cp config.xml build_app/
