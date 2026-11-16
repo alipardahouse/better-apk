@@ -1,4 +1,3 @@
-
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.alipardahouse.app" version="1.0.0"
     xmlns="http://www.w3.org/ns/widgets"
@@ -32,8 +31,11 @@
                 value="@android:color/transparent" />
     <preference name="AndroidWindowSplashScreenBackground"
                 value="#ffffff" />
-    
+
     <!-- Custom App Icon -->
     <icon src="images/icon.png" />
+
+    <!-- Share photos to WhatsApp / Facebook / any app (hold-to-share feature) -->
+    <plugin name="cordova-plugin-x-socialsharing" spec="6.0.4" />
 
 </widget>
