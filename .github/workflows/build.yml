@@ -31,38 +31,27 @@ jobs:
 
       - name: Build Cordova Project
         run: |
+          # Create the Cordova project workspace
           cordova create build_app com.alipardahouse.app "Alipardahouse"
 
+          # Clear out default placeholder files
           rm -rf build_app/www/*
 
-          # Copy ALL existing HTML files automatically
-          cp -r *.html build_app/www/
+          # Copy ALL repository files and folders into build_app/www/ 
+          # excluding the build_app directory itself, git metadata, and workflow files
+          rsync -av --progress ./ build_app/www/ \
+            --exclude 'build_app' \
+            --exclude '.git' \
+            --exclude '.github'
 
-          # Copy ALL existing images into APK
-          cp -r images build_app/www/
-
-          # Clone Cuttlefish repository
-          git clone https://github.com/cottonrays/cuttlefish.git build_app/www/cuttlefish
-          rm -rf build_app/www/cuttlefish/.git
-
-          # Clone Stock Cutter repository
-          git clone https://github.com/kamsec/stock-cutter.git build_app/www/stock-cutter
-          rm -rf build_app/www/stock-cutter/.git
-
-          # Copy config file
-          cp config.xml build_app/
-
-          # Create images folder for app icons
-          mkdir -p build_app/images
-
-          # Copy app icons
-          cp images/icon.png build_app/images/
-          cp images/splash.png build_app/images/
+          # If you have a custom config.xml in your root, copy it to the app root
+          if [ -f "config.xml" ]; then
+            cp config.xml build_app/
+          fi
 
           cd build_app
 
           cordova platform add android
-
           cordova build android --debug
 
       - name: Upload APK Artifact
